@@ -150,7 +150,7 @@ def main():
 
     # Current available method in this repo
     method_list = [
-        'opencv_haar', 'dlib_hog', 'mtcnn', 'mobilenet_ssd' #,'dlib_cnn'
+        'opencv_haar', 'dlib_hog', 'mtcnn', 'mobilenet_ssd' ,'dlib_cnn'
     ]
     
     for method in method_list:
