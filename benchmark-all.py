@@ -6,7 +6,7 @@ import os
 from tqdm import tqdm
 import time
 import argparse
-
+import pathlib
 
 def get_iou(boxA,boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -28,7 +28,7 @@ def get_iou(boxA,boxB):
 	return iou
 
 
-def extract_and_filter_data(splits):
+def extract_and_filter_data(splits,size='small'):
     # Extract bounding box ground truth from dataset annotations, also obtain each image path
     # and maintain all information in one dictionary
     bb_gt_collection = dict()
@@ -37,7 +37,7 @@ def extract_and_filter_data(splits):
         # only read the new files i make with 180 samples.
         with open(
                 os.path.join('dataset', 'wider_face_split',
-                             '_wider_face_%s_bbx_gt.txt' % (split)), 'r') as f:
+                             '_wider_face_%s_%s_bbx_gt.txt' % (size,split)), 'r') as f:
             lines = f.readlines()
 
         for line in lines:
@@ -57,7 +57,8 @@ def extract_and_filter_data(splits):
                     h = int(line_components[3])
 
                     # In order to make benchmarking more valid, we discard faces with width or height less than 15 pixel,
-                    # after reading some part of the data, for out model, we do not need less than 70 pixel faces, so 
+                    # after reading and checking some part of the data (images), for our model, we dont need less than 70 pixel faces, 
+                    #so ignoring all 70 pixels or smaller faces. 
                     if w > 70 and h > 70:
                         bb_gt_collection[image_path].append(
                             np.array([x1, y1, x1 + w, y1 + h]))
@@ -65,17 +66,17 @@ def extract_and_filter_data(splits):
     return bb_gt_collection
 
 
-def evaluate(face_detector, bb_gt_collection, iou_threshold):
+def evaluate(method,face_detector, bb_gt_collection, iou_threshold):
     total_data = len(bb_gt_collection.keys())
     data_total_precision = 0
     data_total_inference_time = 0
-
+    dir_path = str('system_benchmark/img/'+method)
+    pathlib.Path(dir_path).mkdir(parents=True,exist_ok=True)
     # Evaluate face detector and iterate it over dataset
     for i, key in tqdm(enumerate(bb_gt_collection), total=total_data):
         image_data = cv2.imread(key)
         face_bbs_gt = np.array(bb_gt_collection[key])
         total_gt_face = len(face_bbs_gt)
-
         start_time = time.time()
         face_pred = face_detector.detect_face(image_data)
         inf_time = time.time() - start_time
@@ -100,7 +101,7 @@ def evaluate(face_detector, bb_gt_collection, iou_threshold):
                 if iou > pred_dict[i]:
                     pred_dict[i] = iou
             total_iou = total_iou + max_iou_per_gt
-
+            
         if total_gt_face != 0:
             if len(pred_dict.keys()) > 0:
                 for i in pred_dict:
@@ -115,13 +116,14 @@ def evaluate(face_detector, bb_gt_collection, iou_threshold):
             image_average_precision =precision
 
             data_total_precision += image_average_precision
-
+        
+        cv2.imwrite(str(dir_path+'/'+key.split('/')[-1]),image_data)
     result = dict()
     result['mean_average_precision'] = float(data_total_precision) / float(
         total_data)
     result['average_inferencing_time'] = float(
         data_total_inference_time) / float(total_data)
-
+    
     return result
 
 
@@ -147,10 +149,10 @@ def main():
     args = get_args()
     splits = ['val']
     iou_threshold = args.iou_threshold
-
+    pathlib.Path('system_benchmark/img').mkdir(parents=True,exist_ok=True)
     # Current available method in this repo
     method_list = [
-        'opencv_haar', 'dlib_hog', 'mtcnn', 'mobilenet_ssd' ,'dlib_cnn'
+        'opencv_haar','mobilenet_ssd' ,'dlib_hog', 'mtcnn', 'dlib_cnn'
     ]
     
     for method in method_list:
@@ -158,14 +160,14 @@ def main():
             face_detector = OpenCVHaarFaceDetector(scaleFactor=1.3,minNeighbors=5,model_path='models/haarcascade_frontalface_default.xml')
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
-            result = evaluate(face_detector, data_dict, iou_threshold)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
             print('mAP = %s' % (str(result['mean_average_precision'])))
             print('Average inference time = %s' % (str(result['average_inferencing_time'])))
         if method == 'dlib_hog':
             face_detector = DlibHOGFaceDetector(nrof_upsample=0, det_threshold=-0.2)
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
-            result = evaluate(face_detector, data_dict, iou_threshold)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
             print('mAP = %s' % (str(result['mean_average_precision'])))
             print('Average inference time = %s' % (str(result['average_inferencing_time'])))
         if method == 'dlib_cnn':
@@ -173,7 +175,7 @@ def main():
             nrof_upsample=0, model_path='models/mmod_human_face_detector.dat')
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
-            result = evaluate(face_detector, data_dict, iou_threshold)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
             print('mAP = %s' % (str(result['mean_average_precision'])))
             print('Average inference time = %s' % (str(result['average_inferencing_time'])))
         if method == 'mtcnn':
@@ -183,7 +185,7 @@ def main():
             np.load = np_load_old
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
-            result = evaluate(face_detector, data_dict, iou_threshold)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
             print('mAP = %s' % (str(result['mean_average_precision'])))
             print('Average inference time = %s' % (str(result['average_inferencing_time'])))
         if method == 'mobilenet_ssd':
@@ -192,7 +194,7 @@ def main():
             model_path='models/ssd/frozen_inference_graph_face.pb')
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
-            result = evaluate(face_detector, data_dict, iou_threshold)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
             print('mAP = %s' % (str(result['mean_average_precision'])))
             print('Average inference time = %s' % (str(result['average_inferencing_time'])))
 
