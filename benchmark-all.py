@@ -152,7 +152,8 @@ def main():
     pathlib.Path('system_benchmark/img').mkdir(parents=True,exist_ok=True)
     # Current available method in this repo
     method_list = [
-        'opencv_haar','mobilenet_ssd' ,'dlib_hog', 'mtcnn', 'dlib_cnn'
+        #'opencv_haar','mobilenet_ssd' ,'dlib_hog', 
+        'yolo',#'mtcnn', 'dlib_cnn'
     ]
     
     for method in method_list:
@@ -192,6 +193,13 @@ def main():
             face_detector = TensoflowMobilNetSSDFaceDector(
             det_threshold=0.3,
             model_path='models/ssd/frozen_inference_graph_face.pb')
+            print('Method Name: ',method)
+            data_dict = extract_and_filter_data(splits)
+            result = evaluate(method,face_detector, data_dict, iou_threshold)
+            print('mAP = %s' % (str(result['mean_average_precision'])))
+            print('Average inference time = %s' % (str(result['average_inferencing_time'])))
+        if method == 'yolo':
+            face_detector = OpenCVYoloFace()
             print('Method Name: ',method)
             data_dict = extract_and_filter_data(splits)
             result = evaluate(method,face_detector, data_dict, iou_threshold)

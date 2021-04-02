@@ -5,7 +5,7 @@ import resources.mtcnn.mtcnn as mtcnn
 import tensorflow as tf
 
 ## Initializer for face detector classes
-
+from utils import *
 
 class OpenCVHaarFaceDetector():
     def __init__(self,
@@ -158,4 +158,16 @@ class TensoflowMobilNetSSDFaceDector():
             int(y2 * h),
         ] for y1, x1, y2, x2 in selected_boxes])
 
+        return faces
+
+class OpenCVYoloFace():
+    def __init__(self,confidence=1,model_path='cfg/yolov3-face.cfg',weight_path='model-weights/yolov3-wider_16000.weights'):
+        self.net = cv2.dnn.readNetFromDarknet(model_path,weight_path)
+        self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+        self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+    def detect_face(self, image):
+        blob = cv2.dnn.blobFromImage(image, 1 / 255, (416, 416),[0, 0, 0], 1, crop=False)
+        self.net.setInput(blob)
+        outs = self.net.forward(get_outputs_names(self.net))
+        faces = post_process(image, outs, CONF_THRESHOLD, NMS_THRESHOLD)
         return faces
