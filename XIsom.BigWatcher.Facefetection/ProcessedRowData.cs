@@ -1,5 +1,4 @@
 using OpenCvSharp;
-using System.Drawing;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -9,7 +8,6 @@ namespace XIsom.BigWatcher.Facefetection
     [XmlRoot(ElementName = "ProcessedRowData")]
     public class ProcessedRowData
     {
-        FaceDetector faceDetector;
         [XmlElement(ElementName = "rowID")]
         public int rowID;
         [XmlElement(ElementName = "fileName")]
@@ -19,18 +17,40 @@ namespace XIsom.BigWatcher.Facefetection
         [XmlArray(ElementName = "faces")]
         public Rect[] faces;
 
-        public ProcessedRowData(int rowID,string fileName)
+        public ProcessedRowData(int rowID,string fileName,Rect[] faces)
         {
             this.rowID = rowID;
             this.fileName = fileName;
-            this.faceDetector = new FaceDetector();
-            this.faces = faceDetector.getDetectedFaces(fileName);
-            this.detectFaceNumber = faceDetector.getNumberOfDetectedFaces(fileName);
+            this.faces = faces;
+            this.detectFaceNumber = faces.Length;
         }
 
-        public Image getImage()
+        public ProcessedRowData()
         {
-            return (Image) this.faceDetector.getFaceDetectedBitmapImage(this.fileName);
+            this.rowID = 0;
+            this.fileName = string.Empty;
+            this.faces = null;
+            this.detectFaceNumber = 0;
+        }
+
+        public string getSerializeRectforXML()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlSerializer serializer = new XmlSerializer(this.faces.GetType());
+            using (MemoryStream ms = new MemoryStream())
+            {
+                serializer.Serialize(ms, this.faces);
+                ms.Position = 0;
+                xmlDoc.Load(ms);
+                return xmlDoc.InnerXml;
+            }
+        }
+
+        public Rect[] setRectFromXML(string data)
+        {
+            XmlSerializer reader = new XmlSerializer(typeof(Rect[]));
+            return (Rect[]) reader.Deserialize(new StringReader(data));
+          
         }
 
     }

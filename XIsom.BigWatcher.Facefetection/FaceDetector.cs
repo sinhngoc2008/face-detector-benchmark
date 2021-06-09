@@ -59,7 +59,7 @@ namespace XIsom.BigWatcher.Facefetection
             return BitmapConverter.ToBitmap(image);
 
         }
-        public static Image makeFaceDetectedImage(string imageFilename, Rect[] faces) {
+        public Image makeFaceDetectedImage(string imageFilename, Rect[] faces) {
             Mat resultedImage = new Mat(imageFilename, ImreadModes.Color);
             if (faces.Length > 0)
             {

@@ -39,6 +39,8 @@ namespace XIsom.BigWatcher.Facefetection
             this.mainProgressBar = new System.Windows.Forms.ProgressBar();
             this.mainDataGridView = new System.Windows.Forms.DataGridView();
             this.detectButton = new System.Windows.Forms.Button();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +56,7 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.dirButton.Location = new System.Drawing.Point(647, 6);
             this.dirButton.Name = "dirButton";
-            this.dirButton.Size = new System.Drawing.Size(176, 32);
+            this.dirButton.Size = new System.Drawing.Size(86, 32);
             this.dirButton.TabIndex = 1;
             this.dirButton.Text = "Browse";
             this.dirButton.UseVisualStyleBackColor = true;
@@ -64,7 +66,7 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.mainPictureBox.Location = new System.Drawing.Point(17, 44);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(702, 399);
+            this.mainPictureBox.Size = new System.Drawing.Size(623, 399);
             this.mainPictureBox.TabIndex = 2;
             this.mainPictureBox.TabStop = false;
             this.mainPictureBox.Click += new System.EventHandler(this.mainPictureBox_Click);
@@ -72,7 +74,7 @@ namespace XIsom.BigWatcher.Facefetection
             // dirImgCountLabel
             // 
             this.dirImgCountLabel.AutoSize = true;
-            this.dirImgCountLabel.Location = new System.Drawing.Point(725, 44);
+            this.dirImgCountLabel.Location = new System.Drawing.Point(647, 44);
             this.dirImgCountLabel.Name = "dirImgCountLabel";
             this.dirImgCountLabel.Size = new System.Drawing.Size(98, 20);
             this.dirImgCountLabel.TabIndex = 3;
@@ -81,7 +83,7 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             // prevButton
             // 
-            this.prevButton.Location = new System.Drawing.Point(729, 75);
+            this.prevButton.Location = new System.Drawing.Point(645, 74);
             this.prevButton.Name = "prevButton";
             this.prevButton.Size = new System.Drawing.Size(41, 31);
             this.prevButton.TabIndex = 4;
@@ -91,7 +93,7 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             // nextButton
             // 
-            this.nextButton.Location = new System.Drawing.Point(776, 75);
+            this.nextButton.Location = new System.Drawing.Point(692, 74);
             this.nextButton.Name = "nextButton";
             this.nextButton.Size = new System.Drawing.Size(41, 31);
             this.nextButton.TabIndex = 5;
@@ -103,7 +105,7 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.mainProgressBar.Location = new System.Drawing.Point(17, 449);
             this.mainProgressBar.Name = "mainProgressBar";
-            this.mainProgressBar.Size = new System.Drawing.Size(702, 23);
+            this.mainProgressBar.Size = new System.Drawing.Size(623, 23);
             this.mainProgressBar.TabIndex = 6;
             // 
             // mainDataGridView
@@ -114,17 +116,17 @@ namespace XIsom.BigWatcher.Facefetection
             this.mainDataGridView.AllowUserToResizeColumns = false;
             this.mainDataGridView.AllowUserToResizeRows = false;
             this.mainDataGridView.ColumnHeadersHeight = 29;
-            this.mainDataGridView.Location = new System.Drawing.Point(833, 9);
+            this.mainDataGridView.Location = new System.Drawing.Point(751, 9);
             this.mainDataGridView.Name = "mainDataGridView";
             this.mainDataGridView.RowHeadersWidth = 51;
             this.mainDataGridView.RowTemplate.Height = 27;
-            this.mainDataGridView.Size = new System.Drawing.Size(396, 462);
+            this.mainDataGridView.Size = new System.Drawing.Size(425, 462);
             this.mainDataGridView.TabIndex = 7;
-
+            this.mainDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGridView_CellContentClick);
             // 
             // detectButton
             // 
-            this.detectButton.Location = new System.Drawing.Point(731, 127);
+            this.detectButton.Location = new System.Drawing.Point(647, 126);
             this.detectButton.Name = "detectButton";
             this.detectButton.Size = new System.Drawing.Size(85, 45);
             this.detectButton.TabIndex = 8;
@@ -132,11 +134,33 @@ namespace XIsom.BigWatcher.Facefetection
             this.detectButton.UseVisualStyleBackColor = true;
             this.detectButton.Click += new System.EventHandler(this.detectButton_Click);
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(649, 433);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(84, 40);
+            this.saveButton.TabIndex = 9;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(650, 382);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(82, 42);
+            this.loadButton.TabIndex = 10;
+            this.loadButton.Text = "Load";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1241, 476);
+            this.ClientSize = new System.Drawing.Size(1188, 476);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.detectButton);
             this.Controls.Add(this.mainDataGridView);
             this.Controls.Add(this.mainProgressBar);
@@ -167,6 +191,8 @@ namespace XIsom.BigWatcher.Facefetection
         private System.Windows.Forms.ProgressBar mainProgressBar;
         private System.Windows.Forms.DataGridView mainDataGridView;
         private System.Windows.Forms.Button detectButton;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
     }
 }
 
