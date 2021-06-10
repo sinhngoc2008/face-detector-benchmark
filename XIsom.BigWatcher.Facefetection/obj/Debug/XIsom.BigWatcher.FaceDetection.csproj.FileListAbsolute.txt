@@ -31,3 +31,4 @@ C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xis
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.dll
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.pdb
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.ImageDisplay.resources

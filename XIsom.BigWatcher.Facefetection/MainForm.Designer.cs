@@ -41,6 +41,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.detectButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
+            this.autoDetectButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -122,13 +123,13 @@ namespace XIsom.BigWatcher.Facefetection
             this.mainDataGridView.RowTemplate.Height = 27;
             this.mainDataGridView.Size = new System.Drawing.Size(425, 462);
             this.mainDataGridView.TabIndex = 7;
-            this.mainDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGridView_CellContentClick);
+            this.mainDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGridView_CellClick);
             // 
             // detectButton
             // 
             this.detectButton.Location = new System.Drawing.Point(647, 126);
             this.detectButton.Name = "detectButton";
-            this.detectButton.Size = new System.Drawing.Size(85, 45);
+            this.detectButton.Size = new System.Drawing.Size(86, 45);
             this.detectButton.TabIndex = 8;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
@@ -154,11 +155,22 @@ namespace XIsom.BigWatcher.Facefetection
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
+            // autoDetectButton
+            // 
+            this.autoDetectButton.Location = new System.Drawing.Point(647, 198);
+            this.autoDetectButton.Name = "autoDetectButton";
+            this.autoDetectButton.Size = new System.Drawing.Size(86, 53);
+            this.autoDetectButton.TabIndex = 11;
+            this.autoDetectButton.Text = "Auto Detect";
+            this.autoDetectButton.UseVisualStyleBackColor = true;
+            this.autoDetectButton.Click += new System.EventHandler(this.autoDetectButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1188, 476);
+            this.Controls.Add(this.autoDetectButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.detectButton);
@@ -193,6 +205,7 @@ namespace XIsom.BigWatcher.Facefetection
         private System.Windows.Forms.Button detectButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.Button autoDetectButton;
     }
 }
 

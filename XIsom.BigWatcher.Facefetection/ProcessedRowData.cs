@@ -50,7 +50,6 @@ namespace XIsom.BigWatcher.Facefetection
         {
             XmlSerializer reader = new XmlSerializer(typeof(Rect[]));
             return (Rect[]) reader.Deserialize(new StringReader(data));
-          
         }
 
     }

@@ -43,7 +43,7 @@ namespace XIsom.BigWatcher.Facefetection
             nextButton.Visible = value;
             detectButton.Visible = value;
             saveButton.Visible = value;
-            loadButton.Visible = value;
+            autoDetectButton.Visible = value;
         }
 
         private void mainPictureBoxImageSet(string filename) {
@@ -78,7 +78,6 @@ namespace XIsom.BigWatcher.Facefetection
             this.dirString = dirString;
             this.currentRowID = currentRowID;
             mainProgressBar.Minimum = 0;
-            mainProgressBar.Value = currentRowID;
             dirTextBox.Text = this.dirString;
             int numOfImages = imageDirLoading(this.dirString);
 
@@ -92,6 +91,7 @@ namespace XIsom.BigWatcher.Facefetection
                 mainPictureBoxImageSet(this.imageFilelist[currentRowID]);
             }
             mainDataGridView.Update();
+            mainProgressBar.Value = this.currentRowID;
         }
 
         private void dirButton_Click(object sender, EventArgs e)
@@ -123,8 +123,7 @@ namespace XIsom.BigWatcher.Facefetection
         {
             if (this.hasDir && (this.imageFilelist.Length > 0))
             { 
-            
-                
+               // implimented later for click based info showing. 
             }
         }
 
@@ -169,6 +168,7 @@ namespace XIsom.BigWatcher.Facefetection
             
             mainDataGridView.DataSource = this.mainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            mainDataGridView.ReadOnly = true;
             mainDataGridView.Refresh();
         }
 
@@ -182,6 +182,9 @@ namespace XIsom.BigWatcher.Facefetection
 
             this.maintable.Rows.Add(dataRow);
             mainDataGridView.DataSource = this.mainDataSet.Tables[0];
+            mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            mainDataGridView.ReadOnly = true;
+            mainDataGridView.Update();
             mainDataGridView.Refresh();
         }
 
@@ -203,9 +206,9 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void AutoDirExecute() 
         {
-            for(int id =0; id < this.imageFilelist.Length; id++) 
+            imageDirBrowsingButtonLoading(false);
+            for (int id =0; id < this.imageFilelist.Length; id++) 
             {
-                imageDirBrowsingButtonLoading(false);
                 this.currentRowID = id;
                 string filename = this.imageFilelist[id];
                 Rect[] faces = this.faceDetector.getDetectedFaces(filename);
@@ -213,14 +216,17 @@ namespace XIsom.BigWatcher.Facefetection
                 mainPictureBoxImageSet(faceDetector.getFaceDetectedBitmapImage(filename));
                 updateDataset(data);
                 this.hasprocessed = true;
-                Thread.Sleep(300);
-                imageDirBrowsingButtonLoading(true);
+                Thread.Sleep(150);
+                mainProgressBar.Value = this.currentRowID;
+                mainProgressBar.Update();
             }
+            imageDirBrowsingButtonLoading(true);
         }
 
         private void commonDetect()
         {
             imageDirBrowsingButtonLoading(false);
+            loadButton.Visible = false;
             int id = this.currentRowID;
             string filename = this.imageFilelist[id];
             Rect[] faces = this.faceDetector.getDetectedFaces(filename);
@@ -229,6 +235,9 @@ namespace XIsom.BigWatcher.Facefetection
             updateDataset(data);
             this.hasprocessed = true;
             imageDirBrowsingButtonLoading(true);
+            loadButton.Visible = true;
+            mainProgressBar.Value = this.currentRowID;
+            mainProgressBar.Update();
         }
 
         private bool saveProgramState() 
@@ -257,11 +266,14 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void loadProgramState(SaveData saveData)
         {
-            this.initDataset();
+            loadButton.Visible = false;
             this.mainDataSet = saveData.mainDataSet;
+            this.maintable = this.mainDataSet.Tables[0];
             this.setup(saveData.hasDir, saveData.dirString, saveData.currentRowID);
+            mainDataGridView.DataSource = this.mainDataSet.Tables[0];
+            mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
-
+            loadButton.Visible = true;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -283,24 +295,39 @@ namespace XIsom.BigWatcher.Facefetection
         }
 
 
-        private void mainDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void mainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridView dgv = sender as DataGridView;
-            if (dgv.SelectedRows.Count == 1)
-            {
+            
                 imageDirBrowsingButtonLoading(false);
 
-                ProcessedRowData data = new ProcessedRowData();
-                data.rowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
-                data.fileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
-                data.faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
-                data.detectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
-                mainPictureBoxImageSet(this.faceDetector.makeFaceDetectedImage(data.fileName,data.faces));
-                imageDirBrowsingButtonLoading(true);
-                mainDataGridView.Refresh();
+                mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                mainDataGridView.Rows[e.RowIndex].Selected = true;
+
+            if (string.IsNullOrWhiteSpace(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
+            {
+                MessageBox.Show("Please Click in the Cell Value Texts");
             }
+            else 
+            {
+                loadingCellClickContent();
+            }
+                
         }
 
+        private void loadingCellClickContent() 
+        {
+            ProcessedRowData data = new ProcessedRowData();
+            data.rowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
+            data.fileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
+            data.faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
+            data.detectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
+            mainPictureBoxImageSet(this.faceDetector.makeFaceDetectedImage(data.fileName, data.faces));
+            imageDirBrowsingButtonLoading(true);
+            mainDataGridView.Refresh();
+            mainProgressBar.Value = data.rowID;
+            ImageDisplay imageDisplayForm = new ImageDisplay(this.faceDetector.makeFaceDetectedImage(data.fileName, data.faces));
+            imageDisplayForm.Show();
+        }
         private void loadButton_Click(object sender, EventArgs e)
         {
             imageDirBrowsingButtonLoading(false);
@@ -329,6 +356,13 @@ namespace XIsom.BigWatcher.Facefetection
                 }
             }
      
+        }
+
+        private void autoDetectButton_Click(object sender, EventArgs e)
+        {
+            loadButton.Visible = false;
+            this.AutoDirExecute();
+            loadButton.Visible = true;
         }
     }
 }
