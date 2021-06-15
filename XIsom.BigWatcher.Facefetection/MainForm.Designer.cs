@@ -42,6 +42,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.autoDetectButton = new System.Windows.Forms.Button();
+            this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -165,6 +166,14 @@ namespace XIsom.BigWatcher.Facefetection
             this.autoDetectButton.UseVisualStyleBackColor = true;
             this.autoDetectButton.Click += new System.EventHandler(this.autoDetectButton_Click);
             // 
+            // autoProcessBackgroundWorker
+            // 
+            this.autoProcessBackgroundWorker.WorkerReportsProgress = true;
+            this.autoProcessBackgroundWorker.WorkerSupportsCancellation = true;
+            this.autoProcessBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.autoProcessBackgroundWorker_DoWork);
+            this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.autoProcessBackgroundWorker_ProgressChanged);
+            this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoProcessBackgroundWorker_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -206,6 +215,7 @@ namespace XIsom.BigWatcher.Facefetection
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button autoDetectButton;
+        private System.ComponentModel.BackgroundWorker autoProcessBackgroundWorker;
     }
 }
 

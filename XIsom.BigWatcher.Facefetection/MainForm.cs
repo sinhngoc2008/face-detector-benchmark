@@ -1,5 +1,6 @@
 using OpenCvSharp;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -21,6 +22,7 @@ namespace XIsom.BigWatcher.Facefetection
         private DataTable maintable;
         private bool hasprocessed;
         private FaceDetector faceDetector;
+        private bool isAutoprocessingStarted;
         public MainForm()
         {
             InitializeComponent();
@@ -31,9 +33,13 @@ namespace XIsom.BigWatcher.Facefetection
             this.faceDetector = new FaceDetector();
             imageDirBrowsingButtonLoading(false);
             mainDataGridView.VirtualMode = true;
+            this.isAutoprocessingStarted = false;
             initDataset();
 
+
+
         }
+
 
         private void imageDirBrowsingButtonLoading(bool value) {
             
@@ -204,25 +210,6 @@ namespace XIsom.BigWatcher.Facefetection
             }
         }
 
-        private void AutoDirExecute() 
-        {
-            imageDirBrowsingButtonLoading(false);
-            for (int id =0; id < this.imageFilelist.Length; id++) 
-            {
-                this.currentRowID = id;
-                string filename = this.imageFilelist[id];
-                Rect[] faces = this.faceDetector.getDetectedFaces(filename);
-                ProcessedRowData data = new ProcessedRowData(id, filename, faces);
-                mainPictureBoxImageSet(faceDetector.getFaceDetectedBitmapImage(filename));
-                updateDataset(data);
-                this.hasprocessed = true;
-                Thread.Sleep(150);
-                mainProgressBar.Value = this.currentRowID;
-                mainProgressBar.Update();
-            }
-            imageDirBrowsingButtonLoading(true);
-        }
-
         private void commonDetect()
         {
             imageDirBrowsingButtonLoading(false);
@@ -251,7 +238,7 @@ namespace XIsom.BigWatcher.Facefetection
             if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
             {
                 using (StreamWriter streamWriter = new StreamWriter(saveFileDialog1.FileName))
-                {
+                {           
 
                     SaveData saveData = new SaveData(this.hasDir, this.dirString, this.currentRowID, this.mainDataSet);
 
@@ -361,8 +348,67 @@ namespace XIsom.BigWatcher.Facefetection
         private void autoDetectButton_Click(object sender, EventArgs e)
         {
             loadButton.Visible = false;
-            this.AutoDirExecute();
-            loadButton.Visible = true;
+           
+            if (!this.isAutoprocessingStarted)
+            {
+                imageDirBrowsingButtonLoading(false);
+                mainProgressBar.Maximum = this.imageFilelist.Length - 1;
+                autoProcessBackgroundWorker.RunWorkerAsync();
+                this.isAutoprocessingStarted = true;
+                autoDetectButton.Text = "Cancel";
+                autoDetectButton.Visible = true;
+            }
+            else
+            {
+                autoDetectButton.Visible = false;
+                autoDetectButton.Text = "Auto Process";
+                autoDetectButton.Visible = true;
+                autoProcessBackgroundWorker.CancelAsync();
+                
+                while (autoProcessBackgroundWorker.IsBusy)
+                    Application.DoEvents();
+                this.isAutoprocessingStarted = false;
+            }
         }
+
+        private void autoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+           
+            for (int i = 0; i < this.imageFilelist.Length; i++) 
+            {
+                this.currentRowID = i;
+                string filename = this.imageFilelist[this.currentRowID];
+                Rect[] faces = this.faceDetector.getDetectedFaces(filename);
+                ProcessedRowData data = new ProcessedRowData(this.currentRowID, filename, faces);
+                autoProcessBackgroundWorker.ReportProgress(i,data);
+                Thread.Sleep(100);
+
+                if (autoProcessBackgroundWorker.CancellationPending)
+                {
+                    break;
+                }
+
+            }
+        }
+
+        private void autoProcessBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            mainProgressBar.Value = e.ProgressPercentage;
+            ProcessedRowData rowData = (ProcessedRowData) e.UserState;
+            this.updateDataset(rowData);
+            mainDataGridView.Update();
+            mainProgressBar.Update();
+        }
+
+        private void autoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Process Finished");
+            loadButton.Visible = true;
+            autoDetectButton.Text = "Auto Process";
+            autoDetectButton.Visible = true;
+            imageDirBrowsingButtonLoading(true);
+        }
+
     }
 }
