@@ -396,6 +396,8 @@ namespace XIsom.BigWatcher.Facefetection
             {
                 imageDirBrowsingButtonLoading(false);
                 mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
+                
+                // running the procces in background. 
                 autoProcessBackgroundWorker.RunWorkerAsync();
                 this.isAutoprocessingStarted = true;
                 autoDetectButton.Text = "Cancel";
@@ -406,8 +408,9 @@ namespace XIsom.BigWatcher.Facefetection
                 autoDetectButton.Visible = false;
                 autoDetectButton.Text = "Auto Process";
                 autoDetectButton.Visible = true;
+
+                // handling the cancellation for the process while running.
                 autoProcessBackgroundWorker.CancelAsync();
-                
                 while (autoProcessBackgroundWorker.IsBusy)
                     Application.DoEvents();
                 this.isAutoprocessingStarted = false;
@@ -450,6 +453,8 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void autoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+
+            // showing the Messagebox UI for process complition. also show if cancelled.
             MessageBox.Show("Process Finished");
             loadButton.Visible = true;
             autoDetectButton.Text = "Auto Process";
