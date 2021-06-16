@@ -10,14 +10,17 @@ using System.Windows.Forms;
 
 namespace XIsom.BigWatcher.Facefetection
 {
+    /// <summary>
+    /// Image display class UI for clicking the DataGridViewCell click
+    /// </summary>
     public partial class ImageDisplay : Form
     {
-        private Image image;
+        private Image Image;
         public ImageDisplay(Image image)
         {
             InitializeComponent();
-            this.image = image;
-            mainPictureBoxImageSet(this.image);
+            this.Image = image;
+            mainPictureBoxImageSet(this.Image);
         }
 
         private void mainPictureBoxImageSet(Image image)

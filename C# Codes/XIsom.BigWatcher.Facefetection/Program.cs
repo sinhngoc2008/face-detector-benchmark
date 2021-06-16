@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
 
 namespace XIsom.BigWatcher.Facefetection
@@ -17,6 +14,7 @@ namespace XIsom.BigWatcher.Facefetection
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+            GC.Collect(2, GCCollectionMode.Optimized);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace XIsom.BigWatcher.Facefetection
     public class ProcessedRowData
     {
         /// <summary>
-        /// Row Id of the image
+        /// Row Id of the Image
         /// </summary>
         [XmlElement(ElementName = "RowID")]
         public int RowID;

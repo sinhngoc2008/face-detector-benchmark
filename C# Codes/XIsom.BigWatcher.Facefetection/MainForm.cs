@@ -13,31 +13,34 @@ namespace XIsom.BigWatcher.Facefetection
 {
     public partial class MainForm : Form
     {
-        private bool hasDir;
-        private string dirString;
-        private string[] imageFilelist;
-        private int currentRowID;
+        private bool HasDir;
+        private string DirString;
+        private string[] ImageFilelist;
+        private int CurrentRowID;
         private FolderBrowserDialog mainFolderBrowserDialog;
         private DataSet mainDataSet;
         private DataTable maintable;
-        private bool hasprocessed;
-        private FaceDetector faceDetector;
+        private bool Hasprocessed;
+        private FaceDetector FaceDetector;
         private bool isAutoprocessingStarted;
         public MainForm()
         {
             InitializeComponent();
-            GC.Collect(2, GCCollectionMode.Optimized);
-
+            
+            //initial setup for the function call 
             this.setup(false,string.Empty,0);
-            this.hasprocessed = false;
-            this.faceDetector = new FaceDetector();
+            this.Hasprocessed = false;
+            
+            //initialization for the facedetector
+            this.FaceDetector = new FaceDetector();
+
+            //Autoprocessing Started flag set, buttons removing, Datagridview virtual mode for memory saving
             imageDirBrowsingButtonLoading(false);
             mainDataGridView.VirtualMode = true;
             this.isAutoprocessingStarted = false;
+            
+            // dataset initlization
             initDataset();
-
-
-
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace XIsom.BigWatcher.Facefetection
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
         /// <summary>
-        ///  mainPictureBox Image set with the given Image obj of the image
+        ///  mainPictureBox Image set with the given Image obj of the Image
         /// </summary>
         /// <param name="image"></param>
         private void mainPictureBoxImageSet(Image image)
@@ -75,16 +78,16 @@ namespace XIsom.BigWatcher.Facefetection
         /// function to load all images (*.png || *.jpg) in the selected dir URL
         /// </summary>
         /// <param name="dirString"></param>
-        /// <returns></returns>
+        /// <returns> number of totoal viable images in the dir</returns>
         private int imageDirLoading(string dirString){
-            if (this.hasDir)
+            if (this.HasDir)
             {
-                this.imageFilelist = Directory.EnumerateFiles(dirString, "*.*", SearchOption.AllDirectories)
+                this.ImageFilelist = Directory.EnumerateFiles(dirString, "*.*", SearchOption.AllDirectories)
             .Where(s => s.EndsWith(".png") || s.EndsWith(".jpg")).ToArray();
 
-                if (this.imageFilelist.Length > 0)
+                if (this.ImageFilelist.Length > 0)
                 {
-                    return this.imageFilelist.Length;
+                    return this.ImageFilelist.Length;
                 }
                 else
                     return -1;
@@ -100,24 +103,24 @@ namespace XIsom.BigWatcher.Facefetection
         /// <param name="currentRowID"></param>
         private void setup(bool hasDir, string dirString, int currentRowID)
         {
-            this.hasDir = hasDir;
-            this.dirString = dirString;
-            this.currentRowID = currentRowID;
+            this.HasDir = hasDir;
+            this.DirString = dirString;
+            this.CurrentRowID = currentRowID;
             mainProgressBar.Minimum = 0;
-            dirTextBox.Text = this.dirString;
-            int numOfImages = imageDirLoading(this.dirString);
+            dirTextBox.Text = this.DirString;
+            int numOfImages = imageDirLoading(this.DirString);
 
 
             dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
             if (numOfImages > 0)
             {
                 mainProgressBar.Maximum = numOfImages;
-                this.currentRowID = 0;
+                this.CurrentRowID = 0;
                 imageDirBrowsingButtonLoading(true);
-                mainPictureBoxImageSet(this.imageFilelist[currentRowID]);
+                mainPictureBoxImageSet(this.ImageFilelist[currentRowID]);
             }
             mainDataGridView.Update();
-            mainProgressBar.Value = this.currentRowID;
+            mainProgressBar.Value = this.CurrentRowID;
         }
 
         private void dirButton_Click(object sender, EventArgs e)
@@ -129,25 +132,26 @@ namespace XIsom.BigWatcher.Facefetection
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
                 {
-                    this.dirString = mainFolderBrowserDialog.SelectedPath.ToString();
-                    this.hasDir = true;
-                    dirTextBox.Text = this.dirString;
+                    this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
+                    this.HasDir = true;
+                    dirTextBox.Text = this.DirString;
                 }
             }
-            int numOfImages = imageDirLoading(this.dirString);
+            int numOfImages = imageDirLoading(this.DirString);
            
             dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+            
             if (numOfImages > 0) {
                 mainProgressBar.Maximum = numOfImages;
-                this.currentRowID = 0;
+                this.CurrentRowID = 0;
                 imageDirBrowsingButtonLoading(true);
-                mainPictureBoxImageSet(this.imageFilelist[currentRowID]);
+                mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
             }
         }
 
         private void mainPictureBox_Click(object sender, EventArgs e)
         {
-            if (this.hasDir && (this.imageFilelist.Length > 0))
+            if (this.HasDir && (this.ImageFilelist.Length > 0))
             { 
                // implimented later for click based info showing. 
 
@@ -156,25 +160,25 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void prevButton_Click(object sender, EventArgs e)
         {
-            if (this.currentRowID <= 0 || this.currentRowID >= this.imageFilelist.Length - 1) {
-                this.currentRowID = this.imageFilelist.Length - 1;
+            if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1) {
+                this.CurrentRowID = this.ImageFilelist.Length - 1;
             }
-            this.currentRowID--;
-            mainPictureBoxImageSet(this.imageFilelist[currentRowID]);
-            mainProgressBar.Value = currentRowID;
-            this.hasprocessed = false;
+            this.CurrentRowID--;
+            mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+            mainProgressBar.Value = CurrentRowID;
+            this.Hasprocessed = false;
         }
 
         private void nextButton_Click(object sender, EventArgs e)
         {
-            if (this.currentRowID >= this.imageFilelist.Length - 1)
+            if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
             {
-                this.currentRowID = 0;
+                this.CurrentRowID = 0;
             }
-            this.currentRowID++;
-            mainPictureBoxImageSet(this.imageFilelist[currentRowID]);
-            mainProgressBar.Value = currentRowID;
-            this.hasprocessed = false;
+            this.CurrentRowID++;
+            mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+            mainProgressBar.Value = CurrentRowID;
+            this.Hasprocessed = false;
         }
         /// <summary>
         /// initiallization of the Dataset obj for the main dataGridView
@@ -224,7 +228,7 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void detectButton_Click(object sender, EventArgs e)
         {
-            if (this.hasDir && !this.hasprocessed)
+            if (this.HasDir && !this.Hasprocessed)
             {
 
                 imageDirBrowsingButtonLoading(false);
@@ -240,15 +244,25 @@ namespace XIsom.BigWatcher.Facefetection
         {
             
             loadButton.Visible = false;
-            int id = this.currentRowID;
-            string filename = this.imageFilelist[id];
-            Rect[] faces = this.faceDetector.getDetectedFaces(filename);
+            int id = this.CurrentRowID;
+            string filename = this.ImageFilelist[id];
+            
+            // getting the detected faces
+            Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+            
+            //making the row data
             ProcessedRowData data = new ProcessedRowData(id, filename, faces);
-            mainPictureBoxImageSet(faceDetector.getFaceDetectedBitmapImage(filename));
+            
+            //setting the images in picturebox
+            mainPictureBoxImageSet(FaceDetector.getFaceDetectedBitmapImage(filename));
+            
+            // adding the result in datagridview
             updateDataset(data);
-            this.hasprocessed = true;
+
+            //updating UI
+            this.Hasprocessed = true;
             loadButton.Visible = true;
-            mainProgressBar.Value = this.currentRowID;
+            mainProgressBar.Value = this.CurrentRowID;
             mainProgressBar.Update();
         }
 
@@ -268,8 +282,8 @@ namespace XIsom.BigWatcher.Facefetection
             {
                 using (StreamWriter streamWriter = new StreamWriter(saveFileDialog1.FileName))
                 {           
-
-                    SaveData saveData = new SaveData(this.hasDir, this.dirString, this.currentRowID, this.mainDataSet);
+                    // making the savedata obj from the program and saving the serialized SaveData
+                    SaveData saveData = new SaveData(this.HasDir, this.DirString, this.CurrentRowID, this.mainDataSet);
 
                     streamWriter.Write(saveData.ReturnSavedXML());
                     streamWriter.Close();
@@ -297,7 +311,7 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (this.hasDir)
+            if (this.HasDir)
             {
                 imageDirBrowsingButtonLoading(false);
                 if (saveProgramState())
@@ -342,11 +356,11 @@ namespace XIsom.BigWatcher.Facefetection
             data.FileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
             data.Faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
             data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
-            mainPictureBoxImageSet(this.faceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
             imageDirBrowsingButtonLoading(true);
             mainDataGridView.Refresh();
             mainProgressBar.Value = data.RowID;
-            ImageDisplay imageDisplayForm = new ImageDisplay(this.faceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+            ImageDisplay imageDisplayForm = new ImageDisplay(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
             imageDisplayForm.Show();
         }
         private void loadButton_Click(object sender, EventArgs e)
@@ -386,7 +400,7 @@ namespace XIsom.BigWatcher.Facefetection
             if (!this.isAutoprocessingStarted)
             {
                 imageDirBrowsingButtonLoading(false);
-                mainProgressBar.Maximum = this.imageFilelist.Length - 1;
+                mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
                 autoProcessBackgroundWorker.RunWorkerAsync();
                 this.isAutoprocessingStarted = true;
                 autoDetectButton.Text = "Cancel";
@@ -407,19 +421,22 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void autoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+            // autoprocessing main loop in the background wokre
            
-            for (int i = 0; i < this.imageFilelist.Length; i++) 
+            for (int i = 0; i < this.ImageFilelist.Length; i++) 
             {
-                this.currentRowID = i;
-                string filename = this.imageFilelist[this.currentRowID];
-                Rect[] faces = this.faceDetector.getDetectedFaces(filename);
-                ProcessedRowData data = new ProcessedRowData(this.currentRowID, filename, faces);
+                this.CurrentRowID = i;
+                string filename = this.ImageFilelist[this.CurrentRowID];
+                Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+                ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
                 autoProcessBackgroundWorker.ReportProgress(i,data);
+                
+                // adding thread waiting for CPU usage conservation.
                 Thread.Sleep(100);
 
                 if (autoProcessBackgroundWorker.CancellationPending)
                 {
+                    // handling cancel from button clicking
                     break;
                 }
 
@@ -428,6 +445,7 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void autoProcessBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            // updating UI from the background worker, sender ohject is from the autoProcessBackgroundWorker_DoWork()
             mainProgressBar.Value = e.ProgressPercentage;
             ProcessedRowData rowData = (ProcessedRowData) e.UserState;
             this.updateDataset(rowData);

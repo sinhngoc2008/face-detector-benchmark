@@ -2,7 +2,6 @@ using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 
 namespace XIsom.BigWatcher.Facefetection
 {
@@ -40,7 +39,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.FaceClassifier = new CascadeClassifier(this.HaarFileName);
         }
         /// <summary>
-        /// make Matrix obj of the color image from file
+        /// make Matrix obj of the color Image from file
         /// </summary>
         /// <param name="imgFileName"></param>
         /// <returns>Matrix</returns>
@@ -49,7 +48,7 @@ namespace XIsom.BigWatcher.Facefetection
             return new Mat(imgFileName, ImreadModes.Color);
         }
         /// <summary>
-        /// make Matrix obj of the grayscale image from file.
+        /// make Matrix obj of the grayscale Image from file.
         /// as cascade detector need grayscale input.
         /// </summary>
         /// <param name="imgFileName"></param>
@@ -70,7 +69,7 @@ namespace XIsom.BigWatcher.Facefetection
         }
 
         /// <summary>
-        /// returns the image with face draen
+        /// returns the Image with face draen
         /// </summary>
         /// <param name="imgFilename"></param>
         /// <returns></returns>
@@ -93,7 +92,7 @@ namespace XIsom.BigWatcher.Facefetection
         /// <summary>
         /// construct the detected face from the given images and Rectangle array for click display. 
         /// </summary>
-        /// <param name="imageFilename">image filename </param>
+        /// <param name="imageFilename">Image filename </param>
         /// <param name="faces"> Rectangle array </param>
         /// <returns>Image to display in the picturebox</returns>
         public Image makeFaceDetectedImage(string imageFilename, Rect[] faces) {
