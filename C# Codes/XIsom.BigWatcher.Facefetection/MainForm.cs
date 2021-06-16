@@ -40,7 +40,10 @@ namespace XIsom.BigWatcher.Facefetection
 
         }
 
-
+        /// <summary>
+        /// an unified fuction to cluster all the prev, next, detect button visible, remove conditions
+        /// </summary>
+        /// <param name="value"> bool value for all buttons visibility </param>
         private void imageDirBrowsingButtonLoading(bool value) {
             
             // the common buttons in the program to handle save/load/delete visibility
@@ -51,16 +54,28 @@ namespace XIsom.BigWatcher.Facefetection
             saveButton.Visible = value;
             autoDetectButton.Visible = value;
         }
-
+        /// <summary>
+        /// mainPictureBox Image set with the given file URL 
+        /// </summary>
+        /// <param name="filename"></param>
         private void mainPictureBoxImageSet(string filename) {
             mainPictureBox.Image = (Image) new Bitmap(filename);
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
+        /// <summary>
+        ///  mainPictureBox Image set with the given Image obj of the image
+        /// </summary>
+        /// <param name="image"></param>
         private void mainPictureBoxImageSet(Image image)
         {
             mainPictureBox.Image = image;
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
+        /// <summary>
+        /// function to load all images (*.png || *.jpg) in the selected dir URL
+        /// </summary>
+        /// <param name="dirString"></param>
+        /// <returns></returns>
         private int imageDirLoading(string dirString){
             if (this.hasDir)
             {
@@ -77,7 +92,12 @@ namespace XIsom.BigWatcher.Facefetection
             else return -1;
             
         }
-
+        /// <summary>
+        /// fuction to set the DIR URL selected by user, both in the initialization and loading states
+        /// </summary>
+        /// <param name="hasDir"></param>
+        /// <param name="dirString"></param>
+        /// <param name="currentRowID"></param>
         private void setup(bool hasDir, string dirString, int currentRowID)
         {
             this.hasDir = hasDir;
@@ -115,7 +135,7 @@ namespace XIsom.BigWatcher.Facefetection
                 }
             }
             int numOfImages = imageDirLoading(this.dirString);
-            //MessageBox.Show(numOfImages);
+           
             dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
             if (numOfImages > 0) {
                 mainProgressBar.Maximum = numOfImages;
@@ -130,6 +150,7 @@ namespace XIsom.BigWatcher.Facefetection
             if (this.hasDir && (this.imageFilelist.Length > 0))
             { 
                // implimented later for click based info showing. 
+
             }
         }
 
@@ -155,7 +176,9 @@ namespace XIsom.BigWatcher.Facefetection
             mainProgressBar.Value = currentRowID;
             this.hasprocessed = false;
         }
-
+        /// <summary>
+        /// initiallization of the Dataset obj for the main dataGridView
+        /// </summary>
         public void initDataset()
         {
             this.mainDataSet = new DataSet();
@@ -177,13 +200,16 @@ namespace XIsom.BigWatcher.Facefetection
             mainDataGridView.ReadOnly = true;
             mainDataGridView.Refresh();
         }
-
+        /// <summary>
+        /// function updating the Dataset for both single and auto processing 
+        /// </summary>
+        /// <param name="rowData">ProcessedRowData obj </param>
         public void updateDataset(ProcessedRowData rowData)
         {
             DataRow dataRow = this.maintable.NewRow();
-            dataRow["Row ID"] = rowData.rowID.ToString();
-            dataRow["File Name"] = rowData.fileName;
-            dataRow["Detected Face Number"] = rowData.detectFaceNumber.ToString();
+            dataRow["Row ID"] = rowData.RowID.ToString();
+            dataRow["File Name"] = rowData.FileName;
+            dataRow["Detected Face Number"] = rowData.DetectFaceNumber.ToString();
             dataRow["Detected Face(s)"] = rowData.getSerializeRectforXML().ToString();
 
             this.maintable.Rows.Add(dataRow);
@@ -201,18 +227,18 @@ namespace XIsom.BigWatcher.Facefetection
             if (this.hasDir && !this.hasprocessed)
             {
 
-                //single execution
+                imageDirBrowsingButtonLoading(false);
                 this.commonDetect();
-
-                // all files in this folder execution
-                //this.AutoDirExecute(); 
-                 
+                imageDirBrowsingButtonLoading(true);
             }
         }
 
+        /// <summary>
+        /// function for detection 
+        /// </summary>
         private void commonDetect()
         {
-            imageDirBrowsingButtonLoading(false);
+            
             loadButton.Visible = false;
             int id = this.currentRowID;
             string filename = this.imageFilelist[id];
@@ -221,12 +247,15 @@ namespace XIsom.BigWatcher.Facefetection
             mainPictureBoxImageSet(faceDetector.getFaceDetectedBitmapImage(filename));
             updateDataset(data);
             this.hasprocessed = true;
-            imageDirBrowsingButtonLoading(true);
             loadButton.Visible = true;
             mainProgressBar.Value = this.currentRowID;
             mainProgressBar.Update();
         }
 
+        /// <summary>
+        /// function for the detection of the data.
+        /// </summary>
+        /// <returns> bool for confrimation is the data was saved</returns>
         private bool saveProgramState() 
         {
             bool hasSaved = false;
@@ -250,13 +279,16 @@ namespace XIsom.BigWatcher.Facefetection
             }
             return hasSaved;
         }
-
+        /// <summary>
+        /// program loading fucntions
+        /// </summary>
+        /// <param name="saveData"></param>
         private void loadProgramState(SaveData saveData)
         {
             loadButton.Visible = false;
-            this.mainDataSet = saveData.mainDataSet;
+            this.mainDataSet = saveData.MainDataSet;
             this.maintable = this.mainDataSet.Tables[0];
-            this.setup(saveData.hasDir, saveData.dirString, saveData.currentRowID);
+            this.setup(saveData.HasDir, saveData.DirString, saveData.CurrentRowID);
             mainDataGridView.DataSource = this.mainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
@@ -300,19 +332,21 @@ namespace XIsom.BigWatcher.Facefetection
             }
                 
         }
-
+        /// <summary>
+        /// DatagridView click handling function
+        /// </summary>
         private void loadingCellClickContent() 
         {
             ProcessedRowData data = new ProcessedRowData();
-            data.rowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
-            data.fileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
-            data.faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
-            data.detectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
-            mainPictureBoxImageSet(this.faceDetector.makeFaceDetectedImage(data.fileName, data.faces));
+            data.RowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
+            data.FileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
+            data.Faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
+            data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
+            mainPictureBoxImageSet(this.faceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
             imageDirBrowsingButtonLoading(true);
             mainDataGridView.Refresh();
-            mainProgressBar.Value = data.rowID;
-            ImageDisplay imageDisplayForm = new ImageDisplay(this.faceDetector.makeFaceDetectedImage(data.fileName, data.faces));
+            mainProgressBar.Value = data.RowID;
+            ImageDisplay imageDisplayForm = new ImageDisplay(this.faceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
             imageDisplayForm.Show();
         }
         private void loadButton_Click(object sender, EventArgs e)

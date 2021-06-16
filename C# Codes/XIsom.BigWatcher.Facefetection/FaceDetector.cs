@@ -4,45 +4,73 @@ using System.Drawing;
 
 namespace XIsom.BigWatcher.Facefetection
 {
+    /// <summary>
+    /// FaceDetector Class for the system 
+    /// </summary>
     public class FaceDetector
     {
-        private CascadeClassifier faceClassifier;
-        private string haarFileName;
+        /// <summary>
+        /// Main CascadeClassifier
+        /// </summary>
+        private CascadeClassifier FaceClassifier;
+        /// <summary>
+        /// The HAAR XML file for the face detection
+        /// </summary>
+        private string HaarFileName;
 
+        /// <summary>
+        /// Main constructor
+        /// </summary>
         public FaceDetector()
         {
-            this.haarFileName = @"C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\FaceDetector.OpenCvSharp\Resources\haarcascade_frontalface_default.xml";
-            this.faceClassifier = new CascadeClassifier(this.haarFileName);
+            this.HaarFileName = @"C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\FaceDetector.OpenCvSharp\Resources\haarcascade_frontalface_default.xml";
+            this.FaceClassifier = new CascadeClassifier(this.HaarFileName);
 
         }
-
+        /// <summary>
+        /// Const. If we need dirrernt Haar file for other detection
+        /// </summary>
+        /// <param name="fileName"></param>
         public FaceDetector(string fileName)
         {
-            this.haarFileName = fileName;
-            this.faceClassifier = new CascadeClassifier(this.haarFileName);
+            this.HaarFileName = fileName;
+            this.FaceClassifier = new CascadeClassifier(this.HaarFileName);
         }
-
+        /// <summary>
+        /// make Matrix obj of the color image from file
+        /// </summary>
+        /// <param name="imgFileName"></param>
+        /// <returns>Matrix</returns>
         public Mat processedColorImage(string imgFileName)
         {
             return new Mat(imgFileName, ImreadModes.Color);
         }
-
+        /// <summary>
+        /// make Matrix obj of the grayscale image from file.
+        /// as cascade detector need grayscale input.
+        /// </summary>
+        /// <param name="imgFileName"></param>
+        /// <returns>Matrix</returns>
         public Mat processedGrayScaleImage(string imgFileName)
         {
             return new Mat(imgFileName, ImreadModes.Grayscale);
         }
-
+        /// <summary>
+        /// getting the detect faces as the rect object.
+        /// </summary>
+        /// <param name="imgFilename"></param>
+        /// <returns></returns>
         public Rect[] getDetectedFaces(string imgFilename) 
         {
             Mat grayscaleImage = processedGrayScaleImage(imgFilename);
-            return this.faceClassifier.DetectMultiScale(grayscaleImage);
+            return this.FaceClassifier.DetectMultiScale(grayscaleImage);
         }
 
-        public int getNumberOfDetectedFaces(string imgFilename)
-        {
-            return this.faceClassifier.DetectMultiScale(processedGrayScaleImage(imgFilename)).Length;
-        }
-
+        /// <summary>
+        /// returns the image with face draen
+        /// </summary>
+        /// <param name="imgFilename"></param>
+        /// <returns></returns>
         public Bitmap getFaceDetectedBitmapImage(string imgFilename)
         {
             Rect[] faces = getDetectedFaces(imgFilename);
@@ -59,6 +87,12 @@ namespace XIsom.BigWatcher.Facefetection
             return BitmapConverter.ToBitmap(image);
 
         }
+        /// <summary>
+        /// construct the detected face from the given images and Rectangle array for click display. 
+        /// </summary>
+        /// <param name="imageFilename">image filename </param>
+        /// <param name="faces"> Rectangle array </param>
+        /// <returns>Image to display in the picturebox</returns>
         public Image makeFaceDetectedImage(string imageFilename, Rect[] faces) {
             Mat resultedImage = new Mat(imageFilename, ImreadModes.Color);
             if (faces.Length > 0)
