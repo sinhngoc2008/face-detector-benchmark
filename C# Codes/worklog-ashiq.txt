@@ -1,0 +1,55 @@
+log 5/27/2021
+1. making the Emgu Cv program to detect face on the image.
+
+log 5/28/2021
+1. trasnfer all the Emgu Cv program to the OpenCvSharp library
+2. Fix the jpg openfile filter
+3. coding the Detectface class to make XML serialized object to save the detect image files into an other XML files. 
+
+log 5:46 PM 5/31/2021
+1. make XML serialized object for saving the haar detector data to xml
+2. Load the saved XML file with image data into program.
+
+log 5:31 PM 6/1/2021
+1. Added the opencvharp to the main program. 
+2. Added function for adding all images processed with face recognition.
+3. wrote the wrapper class for XML serialization. (save/load not implimented yet)
+
+log 5:47 PM 6/2/2021
+1. added the load/save button functionaly in the main program.
+2. added the process with image change with face detected. 
+
+log 6:28 PM 6/3/2021
+1. added save state for the full program
+2. functional datagridview and save stare for the system. 
+3. load state for the program. 
+
+log 6:28 PM 6/7/2021
+1. Redesigned with OOP. 
+2. allocation and disallocation in 3 main classes. 
+
+log 5:42 PM 6/8/2021
+1. make save load functuion,
+2. Single image processing works, but not auto process.  
+
+log 3:01 PM 6/9/2021
+1. single auto dir execution detect with datagridview update. 
+2. implimented save and load function for all program
+3. study to update the thread into multithread.
+
+log 2:01 PM 6/10/2021
+1. finish the program with all basic requirements. 
+2. Working on BackgroundWorking multithreading in auto dir execution
+
+log 2:01 PM 6/11/2021
+1. study on implimenting the backgroundworker in to the program.
+
+log 6:10 PM 6/14/2021
+1. Make autoprocessing with backgroundworker
+2. re organise the code to make same system with thread. 
+
+log 06:03 PM 6/15/2021
+1. Make another program with Thread and UI thread invoke.
+2. added background worker cancel handing.
+3. Make the program with tablelayout. 
+   
