@@ -1,0 +1,257 @@
+{
+    "PureNodes": [
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+                "Filters": 32,
+                "KernelSize": [
+                    3,
+                    3
+                ],
+                "Strides": 1,
+                "Paddings": 1,
+                "DilationRate": 1,
+                "Activation": 0,
+                "UseBias": 0,
+                "KernelInitializer": 4,
+                "BiasInitializer": 1,
+                "KernelRegularizer": 0,
+                "BiasRegularizer": 0,
+                "ActivityRegularizer": 0,
+                "KernelConstraint": 0,
+                "BiasConstraint": 0
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 0,
+            "ID": 0,
+            "LayerType": 1,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "CNN2D",
+            "X": 2117.6,
+            "Y": 2094.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerMaxPooling2DArgs, XisomNet",
+                "PoolSize": [
+                    2,
+                    2
+                ],
+                "Strides": 2,
+                "Paddings": 1
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 1,
+            "ID": 1,
+            "LayerType": 10,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "MAXPOOLING2D",
+            "X": 2117.6,
+            "Y": 2294.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+                "Filters": 64,
+                "KernelSize": [
+                    3,
+                    3
+                ],
+                "Strides": 1,
+                "Paddings": 1,
+                "DilationRate": 1,
+                "Activation": 0,
+                "UseBias": 0,
+                "KernelInitializer": 4,
+                "BiasInitializer": 1,
+                "KernelRegularizer": 0,
+                "BiasRegularizer": 0,
+                "ActivityRegularizer": 0,
+                "KernelConstraint": 0,
+                "BiasConstraint": 0
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 2,
+            "ID": 0,
+            "LayerType": 1,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "CNN2D",
+            "X": 2117.6,
+            "Y": 2494.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerMaxPooling2DArgs, XisomNet",
+                "PoolSize": [
+                    2,
+                    2
+                ],
+                "Strides": 2,
+                "Paddings": 1
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 3,
+            "ID": 1,
+            "LayerType": 10,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "MAXPOOLING2D",
+            "X": 2117.6,
+            "Y": 2694.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+                "Filters": 64,
+                "KernelSize": [
+                    3,
+                    3
+                ],
+                "Strides": 1,
+                "Paddings": 1,
+                "DilationRate": 1,
+                "Activation": 0,
+                "UseBias": 0,
+                "KernelInitializer": 4,
+                "BiasInitializer": 1,
+                "KernelRegularizer": 0,
+                "BiasRegularizer": 0,
+                "ActivityRegularizer": 0,
+                "KernelConstraint": 0,
+                "BiasConstraint": 0
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 4,
+            "ID": 0,
+            "LayerType": 1,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "CNN2D",
+            "X": 2117.6,
+            "Y": 2894.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerFlattenArgs, XisomNet"
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 5,
+            "ID": 3,
+            "LayerType": 15,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "FLATTEN",
+            "X": 2117.6,
+            "Y": 3094.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerFCArgs, XisomNet",
+                "Units": 64,
+                "Activation": 1,
+                "UseBias": 0,
+                "KernelInitializer": 4,
+                "BiasInitializer": 1,
+                "KernelRegularizer": 0,
+                "BiasRegularizer": 0,
+                "ActivityRegularizer": 0,
+                "KernelConstraint": 0,
+                "BiasConstraint": 0
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 6,
+            "ID": 2,
+            "LayerType": 14,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "FC",
+            "X": 2117.6,
+            "Y": 3294.4
+        },
+        {
+            "LayerArgs": {
+                "$type": "XisomNet.LayersArgs.LayerFCArgs, XisomNet",
+                "Units": 10,
+                "Activation": 1,
+                "UseBias": 0,
+                "KernelInitializer": 4,
+                "BiasInitializer": 1,
+                "KernelRegularizer": 0,
+                "BiasRegularizer": 0,
+                "ActivityRegularizer": 0,
+                "KernelConstraint": 0,
+                "BiasConstraint": 0
+            },
+            "OffSetPoint": "0, 0",
+            "SeqID": 7,
+            "ID": 2,
+            "LayerType": 14,
+            "isDraggable": "true",
+            "isDragging": "false",
+            "NameLayer": "FC",
+            "X": 2117.6,
+            "Y": 3494.4
+        }
+    ],
+    "PureConnectors": [
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 0
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 1
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 1
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 2
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 2
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 3
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 3
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 4
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 4
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 5
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 5
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 6
+        },
+        {
+            "ID": 3,
+            "ParentNodeSeqID": 6
+        },
+        {
+            "ID": 1,
+            "ParentNodeSeqID": 7
+        }
+    ]
+}

@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 namespace ThreadWorker
 {
+    /// <summary>
+    /// Main thread Winform class 
+    /// </summary>
     public partial class MainWorker : Form
     {
+        
         private bool isProcessing;
         private delegate void DisplayCountDelegate(int i);
         private Thread thread;
@@ -19,6 +23,7 @@ namespace ThreadWorker
             this.thread.IsBackground = true;
 
         }
+
 
         private void mainButton_Click(object sender, EventArgs e)
         {

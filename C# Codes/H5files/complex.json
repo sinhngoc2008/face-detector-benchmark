@@ -1,0 +1,364 @@
+{
+  "PureNodes": [
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+          3
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 0,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": true,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 1974.625850888435,
+      "Y": 1884.1959195284503
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+         5 
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 1,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": true,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 2232.065306509483,
+      "Y": 1879.8503413036083
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+          3
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 2,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 1844.639459413987,
+      "Y": 2173.0993211857217
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+          3
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 3,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 1995.1374153852735,
+      "Y": 2018.9034026055049
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+          3
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 4,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 2200.6802726635924,
+      "Y": 2020.0489808303469
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerConcatenateArgs, XisomNet",
+        "Axis": 1
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 5,
+      "ID": 111,
+      "LayerType": 23,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "CONCATENATE",
+      "X": 2101.9918371604326,
+      "Y": 2176.9904776354042
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerConcatenateArgs, XisomNet",
+        "Axis": 1
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 6,
+      "ID": 111,
+      "LayerType": 23,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "CONCATENATE",
+      "X": 1965.6326532547419,
+      "Y": 2353.9836714761595
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerFlattenArgs, XisomNet"
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 7,
+      "ID": 3,
+      "LayerType": 15,
+      "isDraggable": false,
+      "isDragging": false,
+      "NameLayer": "FLATTEN",
+      "X": 1964.4870750298999,
+      "Y": 2529.2571398769774
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerFCArgs, XisomNet",
+        "Units": 32,
+        "Activation": 1,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 8,
+      "ID": 2,
+      "LayerType": 14,
+      "isDraggable": true,
+      "isDragging": false,
+      "NameLayer": "FC",
+      "X": 2183.292515974711,
+      "Y": 2455.9401334870927
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerFCArgs, XisomNet",
+        "Units": 32,
+        "Activation": 1,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 9,
+      "ID": 2,
+      "LayerType": 14,
+      "isDraggable": true,
+      "isDragging": false,
+      "NameLayer": "FC",
+      "X": 2387.2054399965764,
+      "Y": 2295.5591820092209
+    },
+    {
+      "LayerArgs": {
+        "$type": "XisomNet.LayersArgs.LayerCNN2DArgs, XisomNet",
+        "Filters": 32,
+        "KernelSize": [
+          3,
+          3
+        ],
+        "Strides": 2,
+        "Paddings": 1,
+        "DilationRate": 1,
+        "Activation": 0,
+        "UseBias": 0,
+        "KernelInitializer": 4,
+        "BiasInitializer": 1,
+        "KernelRegularizer": 0,
+        "BiasRegularizer": 0,
+        "ActivityRegularizer": 0,
+        "KernelConstraint": 0,
+        "BiasConstraint": 0
+      },
+      "OffSetPoint": "0, 0",
+      "SeqID": 10,
+      "ID": 0,
+      "LayerType": 1,
+      "isDraggable": true,
+      "isDragging": false,
+      "NameLayer": "CNN2D",
+      "X": 1804.1061235520278,
+      "Y": 1997.708843550316
+    }
+  ],
+  "PureConnectors": [
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 0
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 3
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 1
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 4
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 3
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 5
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 4
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 5
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 2
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 6
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 5
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 6
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 6
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 7
+    },
+    {
+      "ID": 2,
+      "ParentNodeSeqID": 7
+    },
+    {
+      "ID": 0,
+      "ParentNodeSeqID": 8
+    },
+    {
+      "ID": 2,
+      "ParentNodeSeqID": 8
+    },
+    {
+      "ID": 0,
+      "ParentNodeSeqID": 9
+    },
+    {
+      "ID": 3,
+      "ParentNodeSeqID": 10
+    },
+    {
+      "ID": 1,
+      "ParentNodeSeqID": 2
+    }
+  ]
+}
