@@ -137,8 +137,10 @@ namespace XIsom.BigWatcher.Facefetection
                     dirTextBox.Text = this.DirString;
                 }
             }
+            // getting the images from the directory
             int numOfImages = imageDirLoading(this.DirString);
-           
+            
+            // setting the label
             dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
             
             if (numOfImages > 0) {
@@ -149,14 +151,6 @@ namespace XIsom.BigWatcher.Facefetection
             }
         }
 
-        private void mainPictureBox_Click(object sender, EventArgs e)
-        {
-            if (this.HasDir && (this.ImageFilelist.Length > 0))
-            { 
-               // implimented later for click based info showing. 
-
-            }
-        }
 
         private void prevButton_Click(object sender, EventArgs e)
         {

@@ -53,3 +53,8 @@ log 06:03 PM 6/15/2021
 2. added background worker cancel handing.
 3. Make the program with tablelayout. 
    
+log 6:01 PM 6/16/2021
+1. Reorginize and comment with the C# coding convensions.
+2. Commenting all the codes in the project.
+3. Reading Coding Conventions in c#, LINQ, and PascalCase vs. camelCasing. 
+4. seeting up file ditectory properly in the FaceDetector Class.
