@@ -77,7 +77,6 @@ namespace XIsom.BigWatcher.Facefetection
             this.mainPictureBox.Size = new System.Drawing.Size(623, 399);
             this.mainPictureBox.TabIndex = 2;
             this.mainPictureBox.TabStop = false;
-            this.mainPictureBox.Click += new System.EventHandler(this.mainPictureBox_Click);
             // 
             // dirImgCountLabel
             // 

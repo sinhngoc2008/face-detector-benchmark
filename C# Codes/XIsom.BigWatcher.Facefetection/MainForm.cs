@@ -326,8 +326,9 @@ namespace XIsom.BigWatcher.Facefetection
         {
             
                 imageDirBrowsingButtonLoading(false);
-
                 mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                
+                // getting the row id selected
                 mainDataGridView.Rows[e.RowIndex].Selected = true;
 
             if (string.IsNullOrWhiteSpace(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
