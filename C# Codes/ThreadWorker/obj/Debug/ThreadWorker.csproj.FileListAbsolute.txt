@@ -1,0 +1,11 @@
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\bin\Debug\ThreadWorker.exe.config
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\bin\Debug\ThreadWorker.exe
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\bin\Debug\ThreadWorker.pdb
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.csprojAssemblyReference.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.MainWorker.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.LayoutDesign.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.Properties.Resources.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.csproj.GenerateResource.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.csproj.CoreCompileInputs.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.exe
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\ThreadWorker\obj\Debug\ThreadWorker.pdb

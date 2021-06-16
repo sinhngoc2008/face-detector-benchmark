@@ -32,3 +32,37 @@ C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xis
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.FaceDetection.csproj.CopyComplete
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.exe
 C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.pdb
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\XIsom.BigWatcher.Facefetection.exe.config
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\XIsom.BigWatcher.Facefetection.exe
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\XIsom.BigWatcher.Facefetection.pdb
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\OpenCvSharp.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\OpenCvSharp.Extensions.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Buffers.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Drawing.Common.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Memory.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.ValueTuple.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\OpenCvSharp.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\OpenCvSharp.Extensions.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Buffers.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Memory.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\System.ValueTuple.xml
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.FaceDetection.csprojAssemblyReference.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.ImageDisplay.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.MainForm.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.Properties.Resources.resources
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.FaceDetection.csproj.GenerateResource.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.FaceDetection.csproj.CoreCompileInputs.cache
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.FaceDetection.csproj.CopyComplete
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.exe
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.pdb
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x86\OpenCvSharpExtern.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x86\opencv_videoio_ffmpeg452.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x64\OpenCvSharpExtern.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x64\opencv_videoio_ffmpeg452_64.dll

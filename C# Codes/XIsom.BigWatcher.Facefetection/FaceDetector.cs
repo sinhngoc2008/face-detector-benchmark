@@ -1,6 +1,8 @@
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
 
 namespace XIsom.BigWatcher.Facefetection
 {
@@ -23,7 +25,8 @@ namespace XIsom.BigWatcher.Facefetection
         /// </summary>
         public FaceDetector()
         {
-            this.HaarFileName = @"C:\Users\user\Dataset\wider_face_yolo\benchmark\tester\C#\TraningProgramming\Xisom.FaceDetection\FaceDetector.OpenCvSharp\Resources\haarcascade_frontalface_default.xml";
+            // getting the main HAAR XML
+            this.HaarFileName = Directory.GetCurrentDirectory().ToString() + @"\..\..\..\Haar\haarcascade_frontalface_default.xml";
             this.FaceClassifier = new CascadeClassifier(this.HaarFileName);
 
         }
