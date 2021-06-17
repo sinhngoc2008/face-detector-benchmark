@@ -60,5 +60,6 @@ log 6:01 PM 6/16/2021
 4. setting up file ditectory properly in the FaceDetector Class.
 
 log 6:02 PM 6/17/2021
-1. Making 3 keras models and save in h5 for testing.
-2.  
+1. Making 3 tensorflow.keras models and save in h5 for testing.
+2. Making a tensorflow.keras complex concat model and train with XOR data.
+3. install tensorflow.net and testing the graphdef()
