@@ -11,8 +11,11 @@ first_model.add(tf.keras.layers.Conv2D(32,3,padding='valid',activation="relu",in
 # checking summary
 first_model.summary()
 
-# saving model
+# saving model h5
 tf.keras.models.save_model(first_model,"first_model.h5")
+# saving model pb
+tf.saved_model.save(first_model,"first_model")
+
 
 # declearing the second model
 first_model = tf.keras.Sequential()
@@ -24,8 +27,10 @@ first_model.add(tf.keras.layers.MaxPool2D((2,2),padding='valid'))
 # checking summary
 first_model.summary()
 
-# saving model
+# saving model h5
 tf.keras.models.save_model(first_model,"second_model.h5")
+# saving model pb
+tf.saved_model.save(first_model,"second_model")
 
 # declearing the third model
 first_model = tf.keras.Sequential()
@@ -39,9 +44,10 @@ first_model.add(tf.keras.layers.Dense(10,activation='relu'))
 # checking summary
 first_model.summary()
 
-# saving model
+# saving model h5
 tf.keras.models.save_model(first_model,"third_model.h5")
-
+# saving model pb
+tf.saved_model.save(first_model,"third_model")
 
 ### checking if the saved lodel can be loaded. ###
 
