@@ -1,0 +1,29 @@
+there are 3 basic models that have been implimented in this program. for Conda installing enviroments as as the developed enviroment.
+
+Enviroment name is yolo.
+
+(for export) --> conda env export --no-builds | findstr -v "prefix" > environment.yml
+
+(for import) --> conda env create -f environment.yml
+
+** check the API for understanding the code https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/keras/models/save_model
+
+1. Conv2D
+	  |
+	  v
+2. Conv2D
+	  |
+	  v
+  Maxpool2D
+	  |
+	  v
+3. Conv2D
+	  |
+	  v
+  Maxpool2D
+	  |
+	  v
+   Flatten
+	  |
+	  v
+	Dense

@@ -58,3 +58,7 @@ log 6:01 PM 6/16/2021
 2. Commenting all the codes in the project.
 3. Reading Coding Conventions in c#, LINQ, and PascalCase vs. camelCasing. 
 4. setting up file ditectory properly in the FaceDetector Class.
+
+log 6:02 PM 6/17/2021
+1. Making 3 keras models and save in h5 for testing.
+2.  

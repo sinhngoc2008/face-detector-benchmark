@@ -35,7 +35,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.FaceDetector = new FaceDetector();
 
             //Autoprocessing Started flag set, buttons removing, Datagridview virtual mode for memory saving
-            imageDirBrowsingButtonLoading(false);
+            ShowHideButtons(false);
             mainDataGridView.VirtualMode = true;
             this.isAutoprocessingStarted = false;
             
@@ -47,7 +47,7 @@ namespace XIsom.BigWatcher.Facefetection
         /// an unified fuction to cluster all the prev, next, detect button visible, remove conditions
         /// </summary>
         /// <param name="value"> bool value for all buttons visibility </param>
-        private void imageDirBrowsingButtonLoading(bool value) {
+        private void ShowHideButtons(bool value) {
             
             // the common buttons in the program to handle save/load/delete visibility
             
@@ -116,7 +116,7 @@ namespace XIsom.BigWatcher.Facefetection
             {
                 mainProgressBar.Maximum = numOfImages;
                 this.CurrentRowID = 0;
-                imageDirBrowsingButtonLoading(true);
+                ShowHideButtons(true);
                 mainPictureBoxImageSet(this.ImageFilelist[currentRowID]);
             }
             mainDataGridView.Update();
@@ -146,7 +146,7 @@ namespace XIsom.BigWatcher.Facefetection
             if (numOfImages > 0) {
                 mainProgressBar.Maximum = numOfImages;
                 this.CurrentRowID = 0;
-                imageDirBrowsingButtonLoading(true);
+                ShowHideButtons(true);
                 mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
             }
         }
@@ -225,9 +225,9 @@ namespace XIsom.BigWatcher.Facefetection
             if (this.HasDir && !this.Hasprocessed)
             {
 
-                imageDirBrowsingButtonLoading(false);
+                ShowHideButtons(false);
                 this.commonDetect();
-                imageDirBrowsingButtonLoading(true);
+                ShowHideButtons(true);
             }
         }
 
@@ -307,7 +307,7 @@ namespace XIsom.BigWatcher.Facefetection
         {
             if (this.HasDir)
             {
-                imageDirBrowsingButtonLoading(false);
+                ShowHideButtons(false);
                 if (saveProgramState())
                 {
                     MessageBox.Show("Program Saved");
@@ -317,7 +317,7 @@ namespace XIsom.BigWatcher.Facefetection
                 {
                     MessageBox.Show("Error Occoured");
                 }
-                imageDirBrowsingButtonLoading(true);
+                ShowHideButtons(true);
             }
         }
 
@@ -325,7 +325,7 @@ namespace XIsom.BigWatcher.Facefetection
         private void mainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             
-                imageDirBrowsingButtonLoading(false);
+                ShowHideButtons(false);
                 mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 
                 // getting the row id selected
@@ -352,7 +352,7 @@ namespace XIsom.BigWatcher.Facefetection
             data.Faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
             data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
-            imageDirBrowsingButtonLoading(true);
+            ShowHideButtons(true);
             mainDataGridView.Refresh();
             mainProgressBar.Value = data.RowID;
             ImageDisplay imageDisplayForm = new ImageDisplay(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
@@ -360,7 +360,7 @@ namespace XIsom.BigWatcher.Facefetection
         }
         private void loadButton_Click(object sender, EventArgs e)
         {
-            imageDirBrowsingButtonLoading(false);
+            ShowHideButtons(false);
 
             using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
             {
@@ -394,7 +394,7 @@ namespace XIsom.BigWatcher.Facefetection
            
             if (!this.isAutoprocessingStarted)
             {
-                imageDirBrowsingButtonLoading(false);
+                ShowHideButtons(false);
                 mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
                 
                 // running the procces in background. 
@@ -459,7 +459,7 @@ namespace XIsom.BigWatcher.Facefetection
             loadButton.Visible = true;
             autoDetectButton.Text = "Auto Process";
             autoDetectButton.Visible = true;
-            imageDirBrowsingButtonLoading(true);
+            ShowHideButtons(true);
         }
 
     }
