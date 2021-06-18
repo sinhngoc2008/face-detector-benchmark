@@ -63,3 +63,7 @@ log 6:02 PM 6/17/2021
 1. Making 3 tensorflow.keras models and save in h5 for testing.
 2. Making a tensorflow.keras complex concat model and train with XOR data.
 3. install tensorflow.net and testing the graphdef()
+
+log 06:10 PM 6/18/2021
+1. Revised the XOR python code to make a frozen graph with pb files.
+2. Checked with C# tensorflow.net for making sure the graph import from pb file.
