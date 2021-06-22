@@ -65,5 +65,14 @@ log 6:02 PM 6/17/2021
 3. install tensorflow.net and testing the graphdef()
 
 log 06:10 PM 6/18/2021
-1. Revised the XOR python code to make a frozen graph with pb files.
+1. Revised the XOR python code to make a frozen graph with pb files. (tried both my systems and medium article)
 2. Checked with C# tensorflow.net for making sure the graph import from pb file.
+
+log 06:30 PM 6/21/2021
+1. Make a plan for c# topcs to cover this week
+2. Studing all the topics covered in the tutorialspoint and Microsoft Docs to make the plans.
+3. Design the app for inheritance and OOP implimentations.
+
+log 6:06 PM 6/22/2021
+1. Add the Thead Processing in the main program. 
+2. Studing the BackgroundWorker, Task, Thead. 

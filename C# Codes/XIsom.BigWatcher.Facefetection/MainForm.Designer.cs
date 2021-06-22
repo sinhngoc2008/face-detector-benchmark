@@ -43,6 +43,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.loadButton = new System.Windows.Forms.Button();
             this.autoDetectButton = new System.Windows.Forms.Button();
             this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.threadProcessButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -197,11 +198,24 @@ namespace XIsom.BigWatcher.Facefetection
             this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.autoProcessBackgroundWorker_ProgressChanged);
             this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoProcessBackgroundWorker_RunWorkerCompleted);
             // 
+            // threadProcessButton
+            // 
+            this.threadProcessButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.threadProcessButton.Location = new System.Drawing.Point(647, 273);
+            this.threadProcessButton.Name = "threadProcessButton";
+            this.threadProcessButton.Size = new System.Drawing.Size(86, 53);
+            this.threadProcessButton.TabIndex = 12;
+            this.threadProcessButton.Text = "Thread Process";
+            this.threadProcessButton.UseVisualStyleBackColor = true;
+            this.threadProcessButton.Click += new System.EventHandler(this.threadProcessButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1188, 531);
+            this.Controls.Add(this.threadProcessButton);
             this.Controls.Add(this.autoDetectButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
@@ -239,6 +253,7 @@ namespace XIsom.BigWatcher.Facefetection
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button autoDetectButton;
         private System.ComponentModel.BackgroundWorker autoProcessBackgroundWorker;
+        private System.Windows.Forms.Button threadProcessButton;
     }
 }
 

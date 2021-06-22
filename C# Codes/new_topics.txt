@@ -1,0 +1,15 @@
+#    Topics to cover in C#
+1   Task, Threads, BackgroundWorker, Async, Deligate Methods.
+
+2   OOP (inheritance, Interface and opverriding) in the C# program   x
+
+3   Interface, Absrtact, polymorphsim, and inheritance in C#
+4   Tutorialspoint All C# otpic, Microsoft Doc Topics Review and Code
+5   Regex for searching in the file for sepcific keyworks   
+6   Exception Handling in the code
+7   Understanding Library and API stricture for the C#
+8   Assemblies, GAC of the C#   x
+9   Assembly, Module, and Reference x
+10   C# - Multithreading
+11   Collections and LINQ in C#  x 
+12   Preprocessor Derectives in C#  x 

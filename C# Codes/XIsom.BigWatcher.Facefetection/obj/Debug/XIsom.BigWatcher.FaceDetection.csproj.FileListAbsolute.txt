@@ -66,3 +66,7 @@ C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.Big
 C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x86\opencv_videoio_ffmpeg452.dll
 C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x64\OpenCvSharpExtern.dll
 C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\dll\x64\opencv_videoio_ffmpeg452_64.dll
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\XIsom.BigWatcher.Facefetection.exe.manifest
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\bin\Debug\XIsom.BigWatcher.Facefetection.application
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.exe.manifest
+C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\C# Codes\XIsom.BigWatcher.Facefetection\obj\Debug\XIsom.BigWatcher.Facefetection.application

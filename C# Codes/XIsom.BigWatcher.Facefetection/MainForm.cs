@@ -13,6 +13,8 @@ namespace XIsom.BigWatcher.Facefetection
 {
     public partial class MainForm : Form
     {
+        #region variables
+
         private bool HasDir;
         private string DirString;
         private string[] ImageFilelist;
@@ -23,6 +25,9 @@ namespace XIsom.BigWatcher.Facefetection
         private bool Hasprocessed;
         private FaceDetector FaceDetector;
         private bool isAutoprocessingStarted;
+        private Thread MainThread;
+
+        #endregion variables
         public MainForm()
         {
             InitializeComponent();
@@ -41,6 +46,10 @@ namespace XIsom.BigWatcher.Facefetection
             
             // dataset initlization
             initDataset();
+
+            //thread init
+            this.MainThread = new Thread(StartThreadProcessing);
+            this.MainThread.IsBackground = true;
         }
 
         /// <summary>
@@ -56,6 +65,7 @@ namespace XIsom.BigWatcher.Facefetection
             detectButton.Visible = value;
             saveButton.Visible = value;
             autoDetectButton.Visible = value;
+            threadProcessButton.Visible = value;
         }
         /// <summary>
         /// mainPictureBox Image set with the given file URL 
@@ -384,6 +394,7 @@ namespace XIsom.BigWatcher.Facefetection
                     }
                     file.Close();
                 }
+
             }
      
         }
@@ -430,7 +441,7 @@ namespace XIsom.BigWatcher.Facefetection
                 autoProcessBackgroundWorker.ReportProgress(i,data);
                 
                 // adding thread waiting for CPU usage conservation.
-                Thread.Sleep(100);
+                Thread.Sleep(300);
 
                 if (autoProcessBackgroundWorker.CancellationPending)
                 {
@@ -447,6 +458,8 @@ namespace XIsom.BigWatcher.Facefetection
             mainProgressBar.Value = e.ProgressPercentage;
             ProcessedRowData rowData = (ProcessedRowData) e.UserState;
             this.updateDataset(rowData);
+            mainProgressBar.Value = rowData.RowID;
+            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(rowData.FileName, rowData.Faces));
             mainDataGridView.Update();
             mainProgressBar.Update();
         }
@@ -462,5 +475,75 @@ namespace XIsom.BigWatcher.Facefetection
             ShowHideButtons(true);
         }
 
+        // thread Button process
+        private void threadProcessButton_Click(object sender, EventArgs e)
+        {
+            ShowHideButtons(false);
+            loadButton.Visible = false;
+            this.MainThread.Start();
+        }
+
+        /// <summary>
+        /// Thread processing main loop fucntion
+        /// </summary>
+        private void StartThreadProcessing()
+        {
+
+            try
+            {
+                for (int i = 0; i < this.ImageFilelist.Length; i++)
+                {
+                    this.CurrentRowID = i;
+                    string filename = this.ImageFilelist[this.CurrentRowID];
+                    Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+                    ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
+                    
+                    //invoking main delegate finction to update UI thread
+                    this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
+                    
+                    // adding sleep to slow down for lesser cpu power load.
+                    Thread.Sleep(100);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message.ToString());
+                this.MainThread.Abort();
+                return;
+            }
+        }
+        /// <summary>
+        /// delegate function to update UI from background thread 
+        /// </summary>
+        /// <param name="processedRowData"></param>
+        private delegate void UpDateDisplayImagesDelegate(ProcessedRowData processedRowData);
+
+        /// <summary>
+        /// deligate calling function for update UI from background thread
+        /// </summary>
+        /// <param name="processedRowData"></param>
+        private void UpDateDisplayImages(ProcessedRowData processedRowData)
+        {
+            mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
+            this.updateDataset(processedRowData);
+            mainDataGridView.Update();
+            mainProgressBar.Update();
+            this.CurrentRowID = processedRowData.RowID;
+            mainProgressBar.Value = processedRowData.RowID;
+            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
+            
+            mainDataGridView.Refresh();
+            mainProgressBar.Update();
+            
+            if (mainProgressBar.Value == mainProgressBar.Maximum)
+            {
+                autoDetectButton.Visible = true;
+                ShowHideButtons(true);
+                loadButton.Visible = true;
+                threadProcessButton.Visible = true;
+            }
+        }
+
+    
     }
 }

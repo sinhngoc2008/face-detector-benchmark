@@ -11,12 +11,14 @@ Enviroment name is yolo.
 1. Conv2D
 	  |
 	  v
+
 2. Conv2D
 	  |
 	  v
   Maxpool2D
 	  |
 	  v
+
 3. Conv2D
 	  |
 	  v

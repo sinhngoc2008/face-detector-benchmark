@@ -1,5 +1,9 @@
 using System;
 using Tensorflow;
+using static Tensorflow.Binding;
+using static Tensorflow.keras;
+using NumSharp;
+
 namespace TensorflowTests
 {
     public class Program
@@ -7,9 +11,8 @@ namespace TensorflowTests
         private static string PbFile = @"C:\Users\user\Dataset\wider_face_yolo\face-detector-benchmark\XOR_models\frozen_graph_xor\xor_model.pb";
         public static void Main(string[] args)
         {
-            var graph = Program.ImportGraph(Program.PbFile);
+            Console.WriteLine("THIS");
 
-            Console.WriteLine(graph._nodes_by_name.Values.ToString());
             _ = Console.ReadLine();
         
         }

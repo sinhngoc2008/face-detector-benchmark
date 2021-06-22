@@ -10,6 +10,8 @@ import tensorflow as tf
 
 import pandas as pd
 import matplotlib.pylab as plt 
+import datetime
+import os
 
 # importing dataset (XoR)
 data = pd.read_csv('dataset/xor-data.csv',header=0)
@@ -52,13 +54,22 @@ model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
               
+
 model.summary()
 
-history = model.fit(features, label, batch_size=1,shuffle = True, nb_epoch=300)
+
+# making model graph image
+
+from tensorflow.keras.utils import plot_model
+plot_model(model,to_file='facenet_keras.png',dpi=100)
+
+
+# model training
+history = model.fit(features, label, batch_size=1,shuffle = True, nb_epoch=50)
 
 print(history.history.keys())
 
-#  "Accuracy"
+#  "Accuracy" plotting
 plt.plot(history.history['acc'])
 plt.title('Model accuracy')
 plt.ylabel('Accuracy')
@@ -67,7 +78,7 @@ plt.grid(True)
 plt.show()
 
 
-# "Loss"
+# "Loss" plotting 
 plt.plot(history.history['loss'])
 plt.title('Model loss')
 plt.ylabel('Loss')
@@ -79,8 +90,7 @@ plt.show()
 # saving model h5
 tf.keras.models.save_model(model,"xor_model.h5")
 
-# saving model pb
-#tf.saved_model.save(model,"xor_model")
+# graph freezing with tensorflow
 
 def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
     """
@@ -113,9 +123,16 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
             session, input_graph_def, output_names, freeze_var_names)
         return frozen_graph
 
+
 from tensorflow.keras import backend as K
+from tensorflow.python.tools import freeze_graph
 
-frozen_graph = freeze_session(K.get_session(),
-                              output_names=[out.op.name for out in model.outputs])
+frozen_graph = freeze_session(K.get_session(),                          output_names=[out.op.name for out in model.outputs])
 
-tf.io.write_graph(frozen_graph, "frozen_graph_xor", "xor_model.pb", as_text=False)
+tf.io.write_graph(freeze_graph, "frozen_graph_xor", "xor_model_revised.pb", as_text=False)
+
+#K.set_learning_phase(0)
+#save_dir = "xor_{:%Y-%m-%d_%H%M%S}".format(datetime.datetime.now())
+#tf.saved_model.simple_save(K.get_session(),save_dir,inputs={"input": model.inputs[0]},outputs={"output": model.outputs[0]})
+
+#freeze_graph.freeze_graph(None,None,None,None,model.outputs[0].op.name,None,None,os.path.join(save_dir,"xor_frozen_model.pb"),False,"",input_saved_model_dir=save_dir)
