@@ -139,29 +139,52 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void dirButton_Click(object sender, EventArgs e)
         {
-            this.mainFolderBrowserDialog = new FolderBrowserDialog();
-            using (this.mainFolderBrowserDialog) 
+            // making the textbox checking
+            if (!this.HasDir && (dirTextBox.Text.ToString() == String.Empty))
             {
-                 var result = this.mainFolderBrowserDialog.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
+                this.mainFolderBrowserDialog = new FolderBrowserDialog();
+                using (this.mainFolderBrowserDialog)
                 {
-                    this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
-                    this.HasDir = true;
-                    dirTextBox.Text = this.DirString;
+                    var result = this.mainFolderBrowserDialog.ShowDialog();
+
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
+                    {
+                        this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
+                        this.HasDir = true;
+                        dirTextBox.Text = this.DirString;
+                    }
                 }
             }
-            // getting the images from the directory
-            int numOfImages = imageDirLoading(this.DirString);
-            
-            // setting the label
-            dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
-            
-            if (numOfImages > 0) {
-                mainProgressBar.Maximum = numOfImages;
-                this.CurrentRowID = 0;
-                ShowHideButtons(true);
-                mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+            else
+            {
+                if (Directory.Exists(dirTextBox.Text.ToString()))
+                {
+                    this.DirString = dirTextBox.Text.ToString();
+                    this.HasDir = true;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid Directory Path");
+                    dirTextBox.Text = String.Empty;
+                }
+
+            }
+
+            if (this.HasDir) 
+            {
+                // getting the images from the directory
+                int numOfImages = imageDirLoading(this.DirString);
+
+                // setting the label
+                dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                if (numOfImages > 0)
+                {
+                    mainProgressBar.Maximum = numOfImages;
+                    this.CurrentRowID = 0;
+                    ShowHideButtons(true);
+                    mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                }
             }
         }
 

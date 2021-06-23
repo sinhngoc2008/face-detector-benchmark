@@ -76,3 +76,8 @@ log 06:30 PM 6/21/2021
 log 6:06 PM 6/22/2021
 1. Add the Thead Processing in the main program. 
 2. Studing the BackgroundWorker, Task, Thead. 
+
+log 3:29 PM 6/23/2021
+1. fixed the github ignore push 
+2. fixed the code for textbox input from user.
+3. added doublebuffer, but still flickkers while thread, backgroundworker runs
