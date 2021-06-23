@@ -251,8 +251,8 @@ namespace XIsom.BigWatcher.Facefetection
             mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.ReadOnly = true;
-            mainDataGridView.Update();
-            mainDataGridView.Refresh();
+            //mainDataGridView.Update();
+            //mainDataGridView.Refresh();
         }
 
 
@@ -469,7 +469,7 @@ namespace XIsom.BigWatcher.Facefetection
                 autoProcessBackgroundWorker.ReportProgress(i,data);
                 
                 // adding thread waiting for CPU usage conservation.
-                Thread.Sleep(300);
+                Thread.Sleep(200);
 
                 if (autoProcessBackgroundWorker.CancellationPending)
                 {
@@ -488,8 +488,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.updateDataset(rowData);
             mainProgressBar.Value = rowData.RowID;
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(rowData.FileName, rowData.Faces));
-            mainDataGridView.Update();
-            mainProgressBar.Update();
+
         }
 
         private void autoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -530,7 +529,7 @@ namespace XIsom.BigWatcher.Facefetection
                     this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
                     
                     // adding sleep to slow down for lesser cpu power load.
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
                 }
             }
             catch (Exception e)
@@ -554,14 +553,11 @@ namespace XIsom.BigWatcher.Facefetection
         {
             mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
             this.updateDataset(processedRowData);
-            mainDataGridView.Update();
-            mainProgressBar.Update();
+            
             this.CurrentRowID = processedRowData.RowID;
             mainProgressBar.Value = processedRowData.RowID;
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
             
-            mainDataGridView.Refresh();
-            mainProgressBar.Update();
             
             if (mainProgressBar.Value == mainProgressBar.Maximum)
             {

@@ -80,4 +80,4 @@ log 6:06 PM 6/22/2021
 log 3:29 PM 6/23/2021
 1. fixed the github ignore push 
 2. fixed the code for textbox input from user.
-3. added doublebuffer, but still flickkers while thread, backgroundworker runs
+3. refactorise the code to solve the flickering while backgroundworker workes.
