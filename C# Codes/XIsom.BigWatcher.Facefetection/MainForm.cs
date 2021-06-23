@@ -20,18 +20,22 @@ namespace XIsom.BigWatcher.Facefetection
         private string[] ImageFilelist;
         private int CurrentRowID;
         private FolderBrowserDialog mainFolderBrowserDialog;
-        private DataSet mainDataSet;
-        private DataTable maintable;
+        private DataSet MainDataSet;
+        private DataTable MainTable;
         private bool Hasprocessed;
         private FaceDetector FaceDetector;
-        private bool isAutoprocessingStarted;
+        private bool IsAutoprocessingStarted;
         private Thread MainThread;
 
         #endregion variables
         public MainForm()
         {
             InitializeComponent();
-            
+
+            //double buffer
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint |
+                          ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
             //initial setup for the function call 
             this.setup(false,string.Empty,0);
             this.Hasprocessed = false;
@@ -42,7 +46,7 @@ namespace XIsom.BigWatcher.Facefetection
             //Autoprocessing Started flag set, buttons removing, Datagridview virtual mode for memory saving
             ShowHideButtons(false);
             mainDataGridView.VirtualMode = true;
-            this.isAutoprocessingStarted = false;
+            this.IsAutoprocessingStarted = false;
             
             // dataset initlization
             initDataset();
@@ -189,21 +193,21 @@ namespace XIsom.BigWatcher.Facefetection
         /// </summary>
         public void initDataset()
         {
-            this.mainDataSet = new DataSet();
-            this.maintable = new DataTable();
+            this.MainDataSet = new DataSet();
+            this.MainTable = new DataTable();
 
             DataColumn rowid = new DataColumn("Row ID");
             DataColumn filename = new DataColumn("File Name");
             DataColumn numberofFaces = new DataColumn("Detected Face Number");
             DataColumn detectedfaces = new DataColumn("Detected Face(s)");
 
-            this.maintable.Columns.Add(rowid);
-            this.maintable.Columns.Add(filename);
-            this.maintable.Columns.Add(numberofFaces);
-            this.maintable.Columns.Add(detectedfaces);
-            this.mainDataSet.Tables.Add(this.maintable);
+            this.MainTable.Columns.Add(rowid);
+            this.MainTable.Columns.Add(filename);
+            this.MainTable.Columns.Add(numberofFaces);
+            this.MainTable.Columns.Add(detectedfaces);
+            this.MainDataSet.Tables.Add(this.MainTable);
             
-            mainDataGridView.DataSource = this.mainDataSet.Tables[0];
+            mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.ReadOnly = true;
             mainDataGridView.Refresh();
@@ -214,14 +218,14 @@ namespace XIsom.BigWatcher.Facefetection
         /// <param name="rowData">ProcessedRowData obj </param>
         public void updateDataset(ProcessedRowData rowData)
         {
-            DataRow dataRow = this.maintable.NewRow();
+            DataRow dataRow = this.MainTable.NewRow();
             dataRow["Row ID"] = rowData.RowID.ToString();
             dataRow["File Name"] = rowData.FileName;
             dataRow["Detected Face Number"] = rowData.DetectFaceNumber.ToString();
             dataRow["Detected Face(s)"] = rowData.getSerializeRectforXML().ToString();
 
-            this.maintable.Rows.Add(dataRow);
-            mainDataGridView.DataSource = this.mainDataSet.Tables[0];
+            this.MainTable.Rows.Add(dataRow);
+            mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.ReadOnly = true;
             mainDataGridView.Update();
@@ -287,7 +291,7 @@ namespace XIsom.BigWatcher.Facefetection
                 using (StreamWriter streamWriter = new StreamWriter(saveFileDialog1.FileName))
                 {           
                     // making the savedata obj from the program and saving the serialized SaveData
-                    SaveData saveData = new SaveData(this.HasDir, this.DirString, this.CurrentRowID, this.mainDataSet);
+                    SaveData saveData = new SaveData(this.HasDir, this.DirString, this.CurrentRowID, this.MainDataSet);
 
                     streamWriter.Write(saveData.ReturnSavedXML());
                     streamWriter.Close();
@@ -304,13 +308,14 @@ namespace XIsom.BigWatcher.Facefetection
         private void loadProgramState(SaveData saveData)
         {
             loadButton.Visible = false;
-            this.mainDataSet = saveData.MainDataSet;
-            this.maintable = this.mainDataSet.Tables[0];
+            this.MainDataSet = saveData.MainDataSet;
+            this.MainTable = this.MainDataSet.Tables[0];
             this.setup(saveData.HasDir, saveData.DirString, saveData.CurrentRowID);
-            mainDataGridView.DataSource = this.mainDataSet.Tables[0];
+            mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
             loadButton.Visible = true;
+           
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -403,14 +408,14 @@ namespace XIsom.BigWatcher.Facefetection
         {
             loadButton.Visible = false;
            
-            if (!this.isAutoprocessingStarted)
+            if (!this.IsAutoprocessingStarted)
             {
                 ShowHideButtons(false);
                 mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
                 
                 // running the procces in background. 
                 autoProcessBackgroundWorker.RunWorkerAsync();
-                this.isAutoprocessingStarted = true;
+                this.IsAutoprocessingStarted = true;
                 autoDetectButton.Text = "Cancel";
                 autoDetectButton.Visible = true;
             }
@@ -424,7 +429,7 @@ namespace XIsom.BigWatcher.Facefetection
                 autoProcessBackgroundWorker.CancelAsync();
                 while (autoProcessBackgroundWorker.IsBusy)
                     Application.DoEvents();
-                this.isAutoprocessingStarted = false;
+                this.IsAutoprocessingStarted = false;
             }
         }
 
@@ -502,7 +507,7 @@ namespace XIsom.BigWatcher.Facefetection
                     this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
                     
                     // adding sleep to slow down for lesser cpu power load.
-                    Thread.Sleep(100);
+                    Thread.Sleep(10);
                 }
             }
             catch (Exception e)
