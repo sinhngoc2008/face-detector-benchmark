@@ -81,3 +81,8 @@ log 3:29 PM 6/23/2021
 1. fixed the github ignore push 
 2. fixed the code for textbox input from user.
 3. refactorise the code to solve the flickering while backgroundworker workes.
+
+log 4:39 PM 6/24/2021
+1. Re-Designed the Application to handle full-screening.
+2. Handle the thead running and cancelling with button.
+3. Added the context menu and exit with menu.

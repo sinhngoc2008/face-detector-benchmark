@@ -29,6 +29,7 @@ namespace Xisom.ReDesigned.FaceDetector
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
@@ -51,12 +52,15 @@ namespace Xisom.ReDesigned.FaceDetector
             this.nextButton = new System.Windows.Forms.Button();
             this.threadCancelButton = new System.Windows.Forms.Button();
             this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.mainContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.pictureButtonTableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.mainContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // maintableLayoutPanel
@@ -174,7 +178,6 @@ namespace Xisom.ReDesigned.FaceDetector
             this.mainPictureBox.Size = new System.Drawing.Size(463, 454);
             this.mainPictureBox.TabIndex = 3;
             this.mainPictureBox.TabStop = false;
-            this.mainPictureBox.Click += new System.EventHandler(this.mainPictureBox_Click);
             // 
             // buttonTableLayoutPanel
             // 
@@ -349,6 +352,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.threadCancelButton.TabIndex = 7;
             this.threadCancelButton.Text = "Cancel";
             this.threadCancelButton.UseVisualStyleBackColor = true;
+            this.threadCancelButton.Click += new System.EventHandler(this.threadCancelButton_Click);
             // 
             // autoProcessBackgroundWorker
             // 
@@ -358,6 +362,21 @@ namespace Xisom.ReDesigned.FaceDetector
             this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.autoProcessBackgroundWorker_ProgressChanged);
             this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoProcessBackgroundWorker_RunWorkerCompleted);
             // 
+            // mainContextMenuStrip
+            // 
+            this.mainContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.mainContextMenuStrip.Name = "mainContextMenuStrip";
+            this.mainContextMenuStrip.Size = new System.Drawing.Size(181, 48);
+            this.mainContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.mainContextMenuStrip_Opening);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "Exit";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -365,6 +384,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(994, 531);
+            this.ContextMenuStrip = this.mainContextMenuStrip;
             this.Controls.Add(this.maintableLayoutPanel);
             this.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -379,6 +399,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.buttonTableLayoutPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.mainContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -404,6 +425,8 @@ namespace Xisom.ReDesigned.FaceDetector
         private System.Windows.Forms.Button nextButton;
         private System.Windows.Forms.Button threadCancelButton;
         private System.ComponentModel.BackgroundWorker autoProcessBackgroundWorker;
+        private System.Windows.Forms.ContextMenuStrip mainContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 

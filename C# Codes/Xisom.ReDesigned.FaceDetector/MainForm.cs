@@ -27,6 +27,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private FaceDetector FaceDetector;
         private bool IsAutoprocessingStarted;
         private Thread MainThread;
+        private bool ImageDisplayFlag;
 
         #endregion variables
         public MainForm()
@@ -52,9 +53,9 @@ namespace Xisom.ReDesigned.FaceDetector
             // dataset initlization
             initDataset();
 
-            //thread init
-            this.MainThread = new Thread(StartThreadProcessing);
-            this.MainThread.IsBackground = true;
+            // Image Display flag set
+            this.ImageDisplayFlag = false;
+
         }
 
         /// <summary>
@@ -398,10 +399,24 @@ namespace Xisom.ReDesigned.FaceDetector
             data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
             ShowHideButtons(true);
-            mainDataGridView.Refresh();
             mainProgressBar.Value = data.RowID;
-            ImageDisplay imageDisplayForm = new ImageDisplay(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
-            imageDisplayForm.Show();
+            ImageDisplay imageDisplayForm = new ImageDisplay();
+            switch (Application.OpenForms.OfType<ImageDisplay>().Count())
+            {
+                case 0:
+                    imageDisplayForm = new ImageDisplay(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+                    imageDisplayForm.Show();
+                    break;
+                case 1:
+                    imageDisplayForm.mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+                    imageDisplayForm.Show();
+                    break;
+                default:
+                    imageDisplayForm.mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+                    imageDisplayForm.Show();
+                    break;
+            }
+                
         }
         private void loadButton_Click(object sender, EventArgs e)
         {
@@ -518,7 +533,12 @@ namespace Xisom.ReDesigned.FaceDetector
             ShowHideButtons(false);
             loadButton.Visible = false;
             dirButton.Visible = false;
+
+            //thread init
+            this.MainThread = new Thread(StartThreadProcessing);
+            this.MainThread.IsBackground = true;
             this.MainThread.Start();
+            threadCancelButton.Visible = true;
         }
 
         /// <summary>
@@ -581,15 +601,27 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
+        private void threadCancelButton_Click(object sender, EventArgs e)
+        {
+            if (this.MainThread.IsAlive)
+            {
+                this.MainThread.Abort();
+                autoDetectButton.Visible = true;
+                ShowHideButtons(true);
+                loadButton.Visible = true;
+                threadProcessButton.Visible = true;
+                dirButton.Visible = true;
+            }
+        }
+
+        private void mainContextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
-        private void mainPictureBox_Click(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }
