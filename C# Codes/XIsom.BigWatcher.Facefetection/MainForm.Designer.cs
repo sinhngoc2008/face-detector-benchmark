@@ -29,6 +29,7 @@ namespace XIsom.BigWatcher.Facefetection
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.dirTextBox = new System.Windows.Forms.TextBox();
             this.dirButton = new System.Windows.Forms.Button();
@@ -44,8 +45,12 @@ namespace XIsom.BigWatcher.Facefetection
             this.autoDetectButton = new System.Windows.Forms.Button();
             this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.threadProcessButton = new System.Windows.Forms.Button();
+            this.mainContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.oKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
+            this.mainContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // dirTextBox
@@ -61,9 +66,9 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.dirButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dirButton.Location = new System.Drawing.Point(647, 6);
+            this.dirButton.Location = new System.Drawing.Point(647, 9);
             this.dirButton.Name = "dirButton";
-            this.dirButton.Size = new System.Drawing.Size(86, 32);
+            this.dirButton.Size = new System.Drawing.Size(98, 25);
             this.dirButton.TabIndex = 1;
             this.dirButton.Text = "Browse";
             this.dirButton.UseVisualStyleBackColor = true;
@@ -75,7 +80,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainPictureBox.Location = new System.Drawing.Point(17, 44);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(623, 399);
+            this.mainPictureBox.Size = new System.Drawing.Size(623, 392);
             this.mainPictureBox.TabIndex = 2;
             this.mainPictureBox.TabStop = false;
             // 
@@ -97,7 +102,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.prevButton.Location = new System.Drawing.Point(645, 74);
             this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(41, 31);
+            this.prevButton.Size = new System.Drawing.Size(41, 24);
             this.prevButton.TabIndex = 4;
             this.prevButton.Text = "<";
             this.prevButton.UseVisualStyleBackColor = true;
@@ -109,7 +114,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.nextButton.Location = new System.Drawing.Point(692, 74);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(41, 31);
+            this.nextButton.Size = new System.Drawing.Size(41, 24);
             this.nextButton.TabIndex = 5;
             this.nextButton.Text = ">";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -121,7 +126,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.mainProgressBar.Location = new System.Drawing.Point(17, 449);
             this.mainProgressBar.Name = "mainProgressBar";
-            this.mainProgressBar.Size = new System.Drawing.Size(623, 23);
+            this.mainProgressBar.Size = new System.Drawing.Size(623, 16);
             this.mainProgressBar.TabIndex = 6;
             // 
             // mainDataGridView
@@ -138,7 +143,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.mainDataGridView.Name = "mainDataGridView";
             this.mainDataGridView.RowHeadersWidth = 51;
             this.mainDataGridView.RowTemplate.Height = 27;
-            this.mainDataGridView.Size = new System.Drawing.Size(425, 462);
+            this.mainDataGridView.Size = new System.Drawing.Size(425, 455);
             this.mainDataGridView.TabIndex = 7;
             this.mainDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGridView_CellClick);
             // 
@@ -146,9 +151,9 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.detectButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.detectButton.Location = new System.Drawing.Point(647, 126);
+            this.detectButton.Location = new System.Drawing.Point(647, 120);
             this.detectButton.Name = "detectButton";
-            this.detectButton.Size = new System.Drawing.Size(86, 45);
+            this.detectButton.Size = new System.Drawing.Size(86, 38);
             this.detectButton.TabIndex = 8;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
@@ -160,7 +165,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.saveButton.Location = new System.Drawing.Point(649, 433);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(84, 40);
+            this.saveButton.Size = new System.Drawing.Size(84, 33);
             this.saveButton.TabIndex = 9;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -172,7 +177,7 @@ namespace XIsom.BigWatcher.Facefetection
             | System.Windows.Forms.AnchorStyles.Left)));
             this.loadButton.Location = new System.Drawing.Point(650, 382);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(82, 42);
+            this.loadButton.Size = new System.Drawing.Size(82, 35);
             this.loadButton.TabIndex = 10;
             this.loadButton.Text = "Load";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -182,9 +187,9 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.autoDetectButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.autoDetectButton.Location = new System.Drawing.Point(647, 198);
+            this.autoDetectButton.Location = new System.Drawing.Point(647, 175);
             this.autoDetectButton.Name = "autoDetectButton";
-            this.autoDetectButton.Size = new System.Drawing.Size(86, 53);
+            this.autoDetectButton.Size = new System.Drawing.Size(86, 46);
             this.autoDetectButton.TabIndex = 11;
             this.autoDetectButton.Text = "Auto Detect";
             this.autoDetectButton.UseVisualStyleBackColor = true;
@@ -202,19 +207,42 @@ namespace XIsom.BigWatcher.Facefetection
             // 
             this.threadProcessButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.threadProcessButton.Location = new System.Drawing.Point(647, 273);
+            this.threadProcessButton.Location = new System.Drawing.Point(647, 239);
             this.threadProcessButton.Name = "threadProcessButton";
-            this.threadProcessButton.Size = new System.Drawing.Size(86, 53);
+            this.threadProcessButton.Size = new System.Drawing.Size(86, 50);
             this.threadProcessButton.TabIndex = 12;
             this.threadProcessButton.Text = "Thread Process";
             this.threadProcessButton.UseVisualStyleBackColor = true;
             this.threadProcessButton.Click += new System.EventHandler(this.threadProcessButton_Click);
             // 
+            // mainContextMenuStrip
+            // 
+            this.mainContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.mainContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.oKToolStripMenuItem});
+            this.mainContextMenuStrip.Name = "mainContextMenuStrip";
+            this.mainContextMenuStrip.Size = new System.Drawing.Size(110, 52);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(109, 24);
+            this.toolStripMenuItem1.Text = "Save";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // oKToolStripMenuItem
+            // 
+            this.oKToolStripMenuItem.Name = "oKToolStripMenuItem";
+            this.oKToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
+            this.oKToolStripMenuItem.Text = "OK";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1188, 531);
+            this.ClientSize = new System.Drawing.Size(1188, 524);
+            this.ContextMenuStrip = this.mainContextMenuStrip;
             this.Controls.Add(this.threadProcessButton);
             this.Controls.Add(this.autoDetectButton);
             this.Controls.Add(this.loadButton);
@@ -233,6 +261,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.Text = "Face Detector";
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();
+            this.mainContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,6 +283,9 @@ namespace XIsom.BigWatcher.Facefetection
         private System.Windows.Forms.Button autoDetectButton;
         private System.ComponentModel.BackgroundWorker autoProcessBackgroundWorker;
         private System.Windows.Forms.Button threadProcessButton;
+        private System.Windows.Forms.ContextMenuStrip mainContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem oKToolStripMenuItem;
     }
 }
 

@@ -6,6 +6,9 @@ using System.Xml;
 
 namespace FaceDetector.OpenCvSharp
 {
+    /// <summary>
+    /// face listing XML serilizer 
+    /// </summary>
     [XmlRoot(ElementName = "ListedFaces")]
     public class ListedFaces
     {

@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace XIsom.BigWatcher.Facefetection
+namespace Xisom.ReDesigned.FaceDetector
 {
-    /// <summary>
-    /// Image display class UI for clicking the DataGridViewCell click
-    /// </summary>
     public partial class ImageDisplay : Form
     {
         private Image Image;

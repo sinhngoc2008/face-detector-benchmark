@@ -9,8 +9,9 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace XIsom.BigWatcher.Facefetection
+namespace Xisom.ReDesigned.FaceDetector
 {
+
     public partial class MainForm : Form
     {
         #region variables
@@ -37,9 +38,9 @@ namespace XIsom.BigWatcher.Facefetection
                           ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
             //initial setup for the function call 
-            this.setup(false,string.Empty,0);
+            this.setup(false, string.Empty, 0);
             this.Hasprocessed = false;
-            
+
             //initialization for the facedetector
             this.FaceDetector = new FaceDetector();
 
@@ -47,7 +48,7 @@ namespace XIsom.BigWatcher.Facefetection
             ShowHideButtons(false);
             mainDataGridView.VirtualMode = true;
             this.IsAutoprocessingStarted = false;
-            
+
             // dataset initlization
             initDataset();
 
@@ -60,24 +61,27 @@ namespace XIsom.BigWatcher.Facefetection
         /// an unified fuction to cluster all the prev, next, detect button visible, remove conditions
         /// </summary>
         /// <param name="value"> bool value for all buttons visibility </param>
-        private void ShowHideButtons(bool value) {
-            
+        private void ShowHideButtons(bool value)
+        {
+
             // the common buttons in the program to handle save/load/delete visibility {====}
-            
+
             prevButton.Visible = value;
             nextButton.Visible = value;
             detectButton.Visible = value;
             saveButton.Visible = value;
             autoDetectButton.Visible = value;
             threadProcessButton.Visible = value;
-            
+            threadCancelButton.Visible = value;
+
         }
         /// <summary>
         /// mainPictureBox Image set with the given file URL 
         /// </summary>
         /// <param name="filename"></param>
-        private void mainPictureBoxImageSet(string filename) {
-            mainPictureBox.Image = (Image) new Bitmap(filename);
+        private void mainPictureBoxImageSet(string filename)
+        {
+            mainPictureBox.Image = (Image)new Bitmap(filename);
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
         /// <summary>
@@ -94,7 +98,8 @@ namespace XIsom.BigWatcher.Facefetection
         /// </summary>
         /// <param name="dirString"></param>
         /// <returns> number of totoal viable images in the dir</returns>
-        private int imageDirLoading(string dirString){
+        private int imageDirLoading(string dirString)
+        {
             if (this.HasDir)
             {
                 this.ImageFilelist = Directory.EnumerateFiles(dirString, "*.*", SearchOption.AllDirectories)
@@ -108,7 +113,7 @@ namespace XIsom.BigWatcher.Facefetection
                     return -1;
             }
             else return -1;
-            
+
         }
         /// <summary>
         /// fuction to set the DIR URL selected by user, both in the initialization and loading states
@@ -171,7 +176,7 @@ namespace XIsom.BigWatcher.Facefetection
 
             }
 
-            if (this.HasDir) 
+            if (this.HasDir)
             {
                 // getting the images from the directory
                 int numOfImages = imageDirLoading(this.DirString);
@@ -192,7 +197,8 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void prevButton_Click(object sender, EventArgs e)
         {
-            if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1) {
+            if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
+            {
                 this.CurrentRowID = this.ImageFilelist.Length - 1;
             }
             this.CurrentRowID--;
@@ -230,7 +236,7 @@ namespace XIsom.BigWatcher.Facefetection
             this.MainTable.Columns.Add(numberofFaces);
             this.MainTable.Columns.Add(detectedfaces);
             this.MainDataSet.Tables.Add(this.MainTable);
-            
+
             mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.ReadOnly = true;
@@ -274,20 +280,20 @@ namespace XIsom.BigWatcher.Facefetection
         /// </summary>
         private void commonDetect()
         {
-            
+
             loadButton.Visible = false;
             int id = this.CurrentRowID;
             string filename = this.ImageFilelist[id];
-            
+
             // getting the detected faces
             Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
-            
+
             //making the row data
             ProcessedRowData data = new ProcessedRowData(id, filename, faces);
-            
+
             //setting the images in picturebox
             mainPictureBoxImageSet(FaceDetector.getFaceDetectedBitmapImage(filename));
-            
+
             // adding the result in datagridview
             updateDataset(data);
 
@@ -302,7 +308,7 @@ namespace XIsom.BigWatcher.Facefetection
         /// function for the detection of the data.
         /// </summary>
         /// <returns> bool for confrimation is the data was saved</returns>
-        private bool saveProgramState() 
+        private bool saveProgramState()
         {
             bool hasSaved = false;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -313,7 +319,7 @@ namespace XIsom.BigWatcher.Facefetection
             if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
             {
                 using (StreamWriter streamWriter = new StreamWriter(saveFileDialog1.FileName))
-                {           
+                {
                     // making the savedata obj from the program and saving the serialized SaveData
                     SaveData saveData = new SaveData(this.HasDir, this.DirString, this.CurrentRowID, this.MainDataSet);
 
@@ -339,7 +345,7 @@ namespace XIsom.BigWatcher.Facefetection
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
             loadButton.Visible = true;
-           
+
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -350,7 +356,7 @@ namespace XIsom.BigWatcher.Facefetection
                 if (saveProgramState())
                 {
                     MessageBox.Show("Program Saved");
-                   
+
                 }
                 else
                 {
@@ -363,27 +369,27 @@ namespace XIsom.BigWatcher.Facefetection
 
         private void mainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            
-                ShowHideButtons(false);
-                mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                
-                // getting the row id selected
-                mainDataGridView.Rows[e.RowIndex].Selected = true;
+
+            ShowHideButtons(false);
+            mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // getting the row id selected
+            mainDataGridView.Rows[e.RowIndex].Selected = true;
 
             if (string.IsNullOrWhiteSpace(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
             {
                 MessageBox.Show("Please Click in the Cell Value Texts");
             }
-            else 
+            else
             {
                 loadingCellClickContent();
             }
-                
+
         }
         /// <summary>
         /// DatagridView click handling function
         /// </summary>
-        private void loadingCellClickContent() 
+        private void loadingCellClickContent()
         {
             ProcessedRowData data = new ProcessedRowData();
             data.RowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
@@ -425,19 +431,19 @@ namespace XIsom.BigWatcher.Facefetection
                 }
 
             }
-     
+
         }
 
         private void autoDetectButton_Click(object sender, EventArgs e)
         {
             loadButton.Visible = false;
             dirButton.Visible = false;
-           
+
             if (!this.IsAutoprocessingStarted)
             {
                 ShowHideButtons(false);
                 mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
-                
+
                 // running the procces in background. 
                 autoProcessBackgroundWorker.RunWorkerAsync();
                 this.IsAutoprocessingStarted = true;
@@ -462,15 +468,15 @@ namespace XIsom.BigWatcher.Facefetection
         private void autoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // autoprocessing main loop in the background wokre
-           
-            for (int i = 0; i < this.ImageFilelist.Length; i++) 
+
+            for (int i = 0; i < this.ImageFilelist.Length; i++)
             {
                 this.CurrentRowID = i;
                 string filename = this.ImageFilelist[this.CurrentRowID];
                 Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
                 ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
-                autoProcessBackgroundWorker.ReportProgress(i,data);
-                
+                autoProcessBackgroundWorker.ReportProgress(i, data);
+
                 // adding thread waiting for CPU usage conservation.
                 Thread.Sleep(200);
 
@@ -487,7 +493,7 @@ namespace XIsom.BigWatcher.Facefetection
         {
             // updating UI from the background worker, sender ohject is from the autoProcessBackgroundWorker_DoWork()
             mainProgressBar.Value = e.ProgressPercentage;
-            ProcessedRowData rowData = (ProcessedRowData) e.UserState;
+            ProcessedRowData rowData = (ProcessedRowData)e.UserState;
             this.updateDataset(rowData);
             mainProgressBar.Value = rowData.RowID;
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(rowData.FileName, rowData.Faces));
@@ -529,10 +535,10 @@ namespace XIsom.BigWatcher.Facefetection
                     string filename = this.ImageFilelist[this.CurrentRowID];
                     Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
                     ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
-                    
+
                     //invoking main delegate finction to update UI thread
                     this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
-                    
+
                     // adding sleep to slow down for lesser cpu power load.
                     Thread.Sleep(100);
                 }
@@ -558,12 +564,12 @@ namespace XIsom.BigWatcher.Facefetection
         {
             mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
             this.updateDataset(processedRowData);
-            
+
             this.CurrentRowID = processedRowData.RowID;
             mainProgressBar.Value = processedRowData.RowID;
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
-            
-            
+
+
             if (mainProgressBar.Value == mainProgressBar.Maximum)
             {
                 autoDetectButton.Visible = true;
@@ -579,5 +585,11 @@ namespace XIsom.BigWatcher.Facefetection
         {
             Application.Exit();
         }
+
+        private void mainPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
