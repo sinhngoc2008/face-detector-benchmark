@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSVUtility.cs" />
     <Compile Include="FaceDetector.cs" />
     <Compile Include="ImageDisplay.cs">
       <SubType>Form</SubType>

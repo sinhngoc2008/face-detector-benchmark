@@ -7,26 +7,24 @@ namespace OtherTests
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Testing code");
+            Processing(1000);
 
-            var t = Task<int>.Run(() => {
-                // making a loop
-
-                int max = 1000000;
-                int ctr = 0;
-                for (ctr = 0; ctr <= max; ctr++)
-                {
-                    if (ctr == max / 2 && DateTime.Now.Hour >= 12)
-                    {
-                        ctr++;
-                        break;
-                    }
-                }
-                return ctr;
-            });
-
-            Console.WriteLine("Finished {0:N0} iterations.", t.Result);
             _ = Console.ReadLine();
         }
+
+
+        public static async Task Processing(int i)
+        {
+            var t = Task.Run(() => 
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    Console.WriteLine("processing {0}",j);
+                }
+            });
+
+            return;
+        }
+
     }
 }

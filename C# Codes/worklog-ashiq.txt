@@ -86,3 +86,10 @@ log 4:39 PM 6/24/2021
 1. Re-Designed the Application to handle full-screening.
 2. Handle the thead running and cancelling with button.
 3. Added the context menu and exit with menu.
+
+
+log 5:35 PM 6/25/2021
+1. Fix the datagridview clicking exeption.
+2. Fix the resizing issure with datagridview.
+3. Put the Thread process start and canel into a single button
+4. Wrote the CSV utilities class  and wrote the Task processing function (not implimented and testing yet). 
