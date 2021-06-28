@@ -156,6 +156,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.dirTextBox.Name = "dirTextBox";
             this.dirTextBox.Size = new System.Drawing.Size(531, 25);
             this.dirTextBox.TabIndex = 1;
+            this.dirTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CheckEnter);
             // 
             // dirButton
             // 
@@ -355,7 +356,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.taskProcessbutton.TabIndex = 7;
             this.taskProcessbutton.Text = "Task Process";
             this.taskProcessbutton.UseVisualStyleBackColor = true;
-            this.taskProcessbutton.Click += new System.EventHandler(this.threadCancelButton_Click);
+            this.taskProcessbutton.Click += new System.EventHandler(this.taskProcessButton_Click);
             // 
             // processLabel
             // 

@@ -76,9 +76,8 @@ namespace Xisom.ReDesigned.FaceDetector
             detectButton.Visible = value;
             saveButton.Visible = value;
             autoDetectButton.Visible = value;
-            //threadProcessButton.Visible = value;
+            threadProcessButton.Visible = value;
             taskProcessbutton.Visible = value;
-
         }
         /// <summary>
         /// mainPictureBox Image set with the given file URL 
@@ -147,6 +146,39 @@ namespace Xisom.ReDesigned.FaceDetector
             mainDataGridView.Update();
             mainProgressBar.Value = this.CurrentRowID;
             threadProcessButton.Visible = true;
+        }
+
+
+        private void CheckEnter(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                this.HasDir = Directory.Exists(dirTextBox.Text);
+                if (HasDir)
+                {
+                    this.HasDir = true;
+                    this.DirString = dirTextBox.Text.ToString();
+                    
+                    // getting the images from the directory
+                    int numOfImages = imageDirLoading(this.DirString);
+
+                    // setting the label
+                    dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                    if (numOfImages > 0)
+                    {
+                        mainProgressBar.Maximum = numOfImages;
+                        this.CurrentRowID = 0;
+                        ShowHideButtons(true);
+                        mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Not a Valid Directory");
+                }
+            }
         }
 
         private void dirButton_Click(object sender, EventArgs e)
@@ -246,6 +278,13 @@ namespace Xisom.ReDesigned.FaceDetector
             mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.ReadOnly = true;
+
+            mainDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            mainDataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            mainDataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            mainDataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            mainDataGridView.AutoResizeColumns();
+
         }
         /// <summary>
         /// function updating the Dataset for both single and auto processing 
@@ -462,6 +501,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
             if (!this.IsAutoprocessingStarted)
             {
+                processLabel.Text = "BackGround Processing";
                 ShowHideButtons(false);
                 threadProcessButton.Visible = false;
                 mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
@@ -471,11 +511,12 @@ namespace Xisom.ReDesigned.FaceDetector
                 this.IsAutoprocessingStarted = true;
                 autoDetectButton.Text = "Cancel";
                 autoDetectButton.Visible = true;
-                this.IsAutoprocessingStarted = false;
-                this.IsAutoprocessingStarted = false;
-                }
+                threadProcessButton.Visible = false;
+            
+            }
             else
             {
+                processLabel.Text = "Process";
                 autoDetectButton.Visible = false;
                 autoDetectButton.Text = "Auto Process";
                 autoDetectButton.Visible = true;
@@ -485,13 +526,14 @@ namespace Xisom.ReDesigned.FaceDetector
                 while (autoProcessBackgroundWorker.IsBusy)
                     Application.DoEvents();
                 this.IsAutoprocessingStarted = false;
+                threadProcessButton.Visible = true;
             }
 
         }
 
         private void autoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // autoprocessing main loop in the background wokre
+            // autoprocessing main loop in the background work
 
             for (int i = 0; i < this.ImageFilelist.Length; i++)
             {
@@ -521,7 +563,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.updateDataset(rowData);
             mainProgressBar.Value = rowData.RowID;
             mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(rowData.FileName, rowData.Faces));
-            threadProcessButton.Visible = true;
+            
         }
 
         private void autoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -534,6 +576,8 @@ namespace Xisom.ReDesigned.FaceDetector
             autoDetectButton.Visible = true;
             ShowHideButtons(true);
             dirButton.Visible = true;
+            threadProcessButton.Visible = true;
+            processLabel.Text = "Process";
         }
 
         // thread Button process
@@ -549,12 +593,15 @@ namespace Xisom.ReDesigned.FaceDetector
                 this.MainThread.Start();
                 this.ThreadFlag = true;
                 ShowHideButtons(false);
+                threadProcessButton.Visible = true;
+                processLabel.Text = "Thread Processing";
             }
             else
             {
                 threadProcessButton.Text = "Thread Process";
                 this.MainThread.Abort();
                 this.ThreadFlag = false;
+                processLabel.Text = "Process";
                 ShowHideButtons(true);
             }
         }
@@ -589,29 +636,6 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
-        public async Task TaskProcessing()
-        {
-            await Task.Run(() =>
-                 {
-                    for (int i = 0; i < this.ImageFilelist.Length; i++)
-                    {
-                        this.CurrentRowID = i;
-                        string filename = this.ImageFilelist[this.CurrentRowID];
-                        Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
-                        ProcessedRowData processedRowData = new ProcessedRowData(this.CurrentRowID, filename, faces);
-
-                        mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
-                        this.updateDataset(processedRowData);
-
-                        this.CurrentRowID = processedRowData.RowID;
-                        mainProgressBar.Value = processedRowData.RowID;
-                        mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
-
-                        // adding sleep to slow down for lesser cpu power load.
-                        Task.Delay(100).Wait();
-                    }
-                });
-        }
 
         /// <summary>
         /// delegate function to update UI from background thread 
@@ -641,12 +665,77 @@ namespace Xisom.ReDesigned.FaceDetector
                 threadProcessButton.Visible = true;
                 dirButton.Visible = true;
                 threadProcessButton.Text = "Thread Process";
+                processLabel.Text = "Process";
             }
         }
 
-        private void threadCancelButton_Click(object sender, EventArgs e)
+        private void taskProcessButton_Click(object sender, EventArgs e)
         {
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
 
+
+            Action taskAction = new Action(() =>
+            {
+                // task action will have the main loop, in the loop various invokes for updating the UI elements will be called.
+
+                for (int i = 0; i < this.ImageFilelist.Length; i++)
+                {
+                    // mainProgressBar
+                    mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
+                    Action progressBarAction = new Action(() => 
+                    {
+                        this.CurrentRowID = i;
+                        mainProgressBar.Value = i;
+                    });
+
+                    mainProgressBar.Invoke(progressBarAction);
+
+                    //datagridView
+                    this.CurrentRowID = i;
+                    string filename = this.ImageFilelist[this.CurrentRowID];
+                    Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+                    ProcessedRowData processedRowData = new ProcessedRowData(this.CurrentRowID, filename, faces);
+                    this.updateDataset(processedRowData);
+                    Action dataGridViewAction = new Action(() =>
+                    {
+                        this.updateDataset(processedRowData);
+                    });
+                    mainDataGridView.Invoke(dataGridViewAction);
+                    //
+                    Action pictureBoxSetAction = new Action(() =>
+                    {
+                        mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
+                    });
+                    mainPictureBox.Invoke(pictureBoxSetAction);
+
+                    //slowing down talk for less CPU load
+                    Task.Delay(300);
+
+                    if (token.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                }
+
+            });
+            if (!this.ThreadFlag)
+            {
+                Application.DoEvents();
+                Task.Run(taskAction, token);
+                this.ThreadFlag = true;
+                taskProcessbutton.Text = "Cancel";
+                processLabel.Text = "Task Processing";
+            }
+            else
+            {
+                Application.DoEvents();
+                taskProcessbutton.Text = "Task Process";
+                tokenSource.Cancel();
+                this.ThreadFlag = false;
+                processLabel.Text = "Process";
+            }
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
