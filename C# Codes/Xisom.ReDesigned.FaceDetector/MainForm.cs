@@ -290,7 +290,7 @@ namespace Xisom.ReDesigned.FaceDetector
             mainDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             mainDataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             mainDataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            mainDataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            mainDataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             mainDataGridView.AutoResizeColumns();
 
         }

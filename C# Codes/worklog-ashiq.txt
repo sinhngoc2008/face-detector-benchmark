@@ -98,4 +98,7 @@ log 5:49 PM 6/28/2021
 2. Added the enter key pressing with textbox.
 3. added task based processing.
 4. added the Text for showing the processing label.
-  
+
+log 4:43 PM 6/29/2021
+1. added the CSV rightclick and save file. 
+2. studied the Task and UI thread invoke.
