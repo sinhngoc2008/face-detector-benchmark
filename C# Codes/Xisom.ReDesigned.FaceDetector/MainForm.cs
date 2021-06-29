@@ -689,7 +689,6 @@ namespace Xisom.ReDesigned.FaceDetector
                 for (int i = 0; i < this.ImageFilelist.Length; i++)
                 {
                     // mainProgressBar
-                    mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
                     Action progressBarAction = new Action(() => 
                     {
                         this.CurrentRowID = i;
@@ -703,7 +702,7 @@ namespace Xisom.ReDesigned.FaceDetector
                     string filename = this.ImageFilelist[this.CurrentRowID];
                     Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
                     ProcessedRowData processedRowData = new ProcessedRowData(this.CurrentRowID, filename, faces);
-                    this.UpdateDataset(processedRowData);
+                    
                     Action dataGridViewAction = new Action(() =>
                     {
                         this.UpdateDataset(processedRowData);
