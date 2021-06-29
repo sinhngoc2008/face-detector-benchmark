@@ -111,7 +111,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.mainDataGridView.RowTemplate.Height = 27;
             this.mainDataGridView.Size = new System.Drawing.Size(446, 652);
             this.mainDataGridView.TabIndex = 0;
-            this.mainDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGridView_CellClick);
+            this.mainDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MainDataGridView_CellClick);
             // 
             // pictureButtonTableLayoutPanel
             // 
@@ -168,7 +168,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.dirButton.TabIndex = 2;
             this.dirButton.Text = "Browse";
             this.dirButton.UseVisualStyleBackColor = true;
-            this.dirButton.Click += new System.EventHandler(this.dirButton_Click);
+            this.dirButton.Click += new System.EventHandler(this.DirButton_Click);
             // 
             // mainPictureBox
             // 
@@ -226,7 +226,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.loadButton.TabIndex = 0;
             this.loadButton.Text = "Load";
             this.loadButton.UseVisualStyleBackColor = true;
-            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            this.loadButton.Click += new System.EventHandler(this.LoadButton_Click);
             // 
             // detectButton
             // 
@@ -240,7 +240,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.detectButton.TabIndex = 1;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
-            this.detectButton.Click += new System.EventHandler(this.detectButton_Click);
+            this.detectButton.Click += new System.EventHandler(this.DetectButton_Click);
             // 
             // autoDetectButton
             // 
@@ -254,7 +254,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.autoDetectButton.TabIndex = 2;
             this.autoDetectButton.Text = "Auto Detect";
             this.autoDetectButton.UseVisualStyleBackColor = true;
-            this.autoDetectButton.Click += new System.EventHandler(this.autoDetectButton_Click);
+            this.autoDetectButton.Click += new System.EventHandler(this.AutoDetectButton_Click);
             // 
             // threadProcessButton
             // 
@@ -268,7 +268,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.threadProcessButton.TabIndex = 4;
             this.threadProcessButton.Text = "Thread Process";
             this.threadProcessButton.UseVisualStyleBackColor = true;
-            this.threadProcessButton.Click += new System.EventHandler(this.threadProcessButton_Click);
+            this.threadProcessButton.Click += new System.EventHandler(this.ThreadProcessButton_Click);
             // 
             // saveButton
             // 
@@ -282,7 +282,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.saveButton.TabIndex = 4;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // dirImgCountLabel
             // 
@@ -328,7 +328,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.prevButton.TabIndex = 0;
             this.prevButton.Text = "<<";
             this.prevButton.UseVisualStyleBackColor = true;
-            this.prevButton.Click += new System.EventHandler(this.prevButton_Click);
+            this.prevButton.Click += new System.EventHandler(this.PrevButton_Click);
             // 
             // nextButton
             // 
@@ -342,7 +342,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.nextButton.TabIndex = 1;
             this.nextButton.Text = ">>";
             this.nextButton.UseVisualStyleBackColor = true;
-            this.nextButton.Click += new System.EventHandler(this.nextButton_Click);
+            this.nextButton.Click += new System.EventHandler(this.NextButton_Click);
             // 
             // taskProcessbutton
             // 
@@ -356,7 +356,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.taskProcessbutton.TabIndex = 7;
             this.taskProcessbutton.Text = "Task Process";
             this.taskProcessbutton.UseVisualStyleBackColor = true;
-            this.taskProcessbutton.Click += new System.EventHandler(this.taskProcessButton_Click);
+            this.taskProcessbutton.Click += new System.EventHandler(this.TaskProcessButton_Click);
             // 
             // processLabel
             // 
@@ -375,9 +375,9 @@ namespace Xisom.ReDesigned.FaceDetector
             // 
             this.autoProcessBackgroundWorker.WorkerReportsProgress = true;
             this.autoProcessBackgroundWorker.WorkerSupportsCancellation = true;
-            this.autoProcessBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.autoProcessBackgroundWorker_DoWork);
-            this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.autoProcessBackgroundWorker_ProgressChanged);
-            this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoProcessBackgroundWorker_RunWorkerCompleted);
+            this.autoProcessBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AutoProcessBackgroundWorker_DoWork);
+            this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.AutoProcessBackgroundWorker_ProgressChanged);
+            this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AutoProcessBackgroundWorker_RunWorkerCompleted);
             // 
             // mainContextMenuStrip
             // 
@@ -392,7 +392,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(102, 24);
             this.toolStripMenuItem1.Text = "Exit";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // MainForm
             // 

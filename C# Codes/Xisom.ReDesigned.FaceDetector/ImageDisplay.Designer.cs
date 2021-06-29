@@ -44,7 +44,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.imageDisplayPictureBox.Size = new System.Drawing.Size(794, 446);
             this.imageDisplayPictureBox.TabIndex = 0;
             this.imageDisplayPictureBox.TabStop = false;
-            this.imageDisplayPictureBox.Click += new System.EventHandler(this.imageDisplayPictureBox_Click);
+            this.imageDisplayPictureBox.Click += new System.EventHandler(this.ImageDisplayPictureBox_Click);
             // 
             // ImageDisplay
             // 

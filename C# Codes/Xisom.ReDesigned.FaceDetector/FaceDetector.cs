@@ -43,7 +43,7 @@ public class FaceDetector
         /// </summary>
         /// <param name="imgFileName"></param>
         /// <returns>Matrix</returns>
-        public Mat processedColorImage(string imgFileName)
+        public Mat ProcessedColorImage(string imgFileName)
         {
             return new Mat(imgFileName, ImreadModes.Color);
         }
@@ -53,7 +53,7 @@ public class FaceDetector
         /// </summary>
         /// <param name="imgFileName"></param>
         /// <returns>Matrix</returns>
-        public Mat processedGrayScaleImage(string imgFileName)
+        public Mat ProcessedGrayScaleImage(string imgFileName)
         {
             return new Mat(imgFileName, ImreadModes.Grayscale);
         }
@@ -62,9 +62,9 @@ public class FaceDetector
         /// </summary>
         /// <param name="imgFilename"></param>
         /// <returns></returns>
-        public Rect[] getDetectedFaces(string imgFilename) 
+        public Rect[] GetDetectedFaces(string imgFilename) 
         {
-            Mat grayscaleImage = processedGrayScaleImage(imgFilename);
+            Mat grayscaleImage = ProcessedGrayScaleImage(imgFilename);
             return this.FaceClassifier.DetectMultiScale(grayscaleImage);
         }
 
@@ -73,10 +73,10 @@ public class FaceDetector
         /// </summary>
         /// <param name="imgFilename"></param>
         /// <returns></returns>
-        public Bitmap getFaceDetectedBitmapImage(string imgFilename)
+        public Bitmap GetFaceDetectedBitmapImage(string imgFilename)
         {
-            Rect[] faces = getDetectedFaces(imgFilename);
-            Mat image = processedColorImage(imgFilename);
+            Rect[] faces = GetDetectedFaces(imgFilename);
+            Mat image = ProcessedColorImage(imgFilename);
 
             if (faces.Length > 0)
             {
@@ -95,7 +95,7 @@ public class FaceDetector
         /// <param name="imageFilename">Image filename </param>
         /// <param name="faces"> Rectangle array </param>
         /// <returns>Image to display in the picturebox</returns>
-        public Image makeFaceDetectedImage(string imageFilename, Rect[] faces) {
+        public Image MakeFaceDetectedImage(string imageFilename, Rect[] faces) {
             Mat resultedImage = new Mat(imageFilename, ImreadModes.Color);
             if (faces.Length > 0)
             {

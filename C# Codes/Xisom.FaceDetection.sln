@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDF5Processor", "HDF5Proces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorflowTests", "TensorflowTests\TensorflowTests.csproj", "{2942DA84-544E-4F7A-92E2-91760EA94BA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtherTests", "OtherTests\OtherTests.csproj", "{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xisom.ReDesigned.FaceDetector", "Xisom.ReDesigned.FaceDetector\Xisom.ReDesigned.FaceDetector.csproj", "{597ABD35-71C1-491E-B4A4-DD40832289F5}"
 EndProject
 Global
@@ -65,14 +63,6 @@ Global
 		{2942DA84-544E-4F7A-92E2-91760EA94BA6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2942DA84-544E-4F7A-92E2-91760EA94BA6}.Release|x64.ActiveCfg = Release|x64
 		{2942DA84-544E-4F7A-92E2-91760EA94BA6}.Release|x64.Build.0 = Release|x64
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Debug|x64.Build.0 = Debug|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Release|x64.ActiveCfg = Release|Any CPU
-		{0260F96F-300F-4E3E-8ECE-0E7AB5D93108}.Release|x64.Build.0 = Release|Any CPU
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Debug|x64.ActiveCfg = Debug|Any CPU

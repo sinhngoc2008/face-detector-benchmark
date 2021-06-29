@@ -39,8 +39,8 @@ namespace Xisom.ReDesigned.FaceDetector
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint |
                           ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
-            //initial setup for the function call 
-            this.setup(false, string.Empty, 0);
+            //initial Setup for the function call 
+            this.Setup(false, string.Empty, 0);
             this.Hasprocessed = false;
 
             //initialization for the facedetector
@@ -52,7 +52,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.IsAutoprocessingStarted = false;
 
             // dataset initlization
-            initDataset();
+            InitDataset();
 
             // thread
 
@@ -83,7 +83,7 @@ namespace Xisom.ReDesigned.FaceDetector
         /// mainPictureBox Image set with the given file URL 
         /// </summary>
         /// <param name="filename"></param>
-        private void mainPictureBoxImageSet(string filename)
+        private void MainPictureBoxImageSet(string filename)
         {
             mainPictureBox.Image = (Image)new Bitmap(filename);
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -92,7 +92,7 @@ namespace Xisom.ReDesigned.FaceDetector
         ///  mainPictureBox Image set with the given Image obj of the Image
         /// </summary>
         /// <param name="image"></param>
-        private void mainPictureBoxImageSet(Image image)
+        private void MainPictureBoxImageSet(Image image)
         {
             mainPictureBox.Image = image;
             mainPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -102,7 +102,7 @@ namespace Xisom.ReDesigned.FaceDetector
         /// </summary>
         /// <param name="dirString"></param>
         /// <returns> number of totoal viable images in the dir</returns>
-        private int imageDirLoading(string dirString)
+        private int ImageDirLoading(string dirString)
         {
             if (this.HasDir)
             {
@@ -125,14 +125,14 @@ namespace Xisom.ReDesigned.FaceDetector
         /// <param name="hasDir"></param>
         /// <param name="dirString"></param>
         /// <param name="currentRowID"></param>
-        private void setup(bool hasDir, string dirString, int currentRowID)
+        private void Setup(bool hasDir, string dirString, int currentRowID)
         {
             this.HasDir = hasDir;
             this.DirString = dirString;
             this.CurrentRowID = currentRowID;
             mainProgressBar.Minimum = 0;
             dirTextBox.Text = this.DirString;
-            int numOfImages = imageDirLoading(this.DirString);
+            int numOfImages = ImageDirLoading(this.DirString);
 
 
             dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
@@ -141,7 +141,7 @@ namespace Xisom.ReDesigned.FaceDetector
                 mainProgressBar.Maximum = numOfImages;
                 this.CurrentRowID = 0;
                 ShowHideButtons(true);
-                mainPictureBoxImageSet(this.ImageFilelist[currentRowID]);
+                MainPictureBoxImageSet(this.ImageFilelist[currentRowID]);
             }
             mainDataGridView.Update();
             mainProgressBar.Value = this.CurrentRowID;
@@ -160,7 +160,7 @@ namespace Xisom.ReDesigned.FaceDetector
                     this.DirString = dirTextBox.Text.ToString();
                     
                     // getting the images from the directory
-                    int numOfImages = imageDirLoading(this.DirString);
+                    int numOfImages = ImageDirLoading(this.DirString);
 
                     // setting the label
                     dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
@@ -170,7 +170,7 @@ namespace Xisom.ReDesigned.FaceDetector
                         mainProgressBar.Maximum = numOfImages;
                         this.CurrentRowID = 0;
                         ShowHideButtons(true);
-                        mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
                     }
 
                 }
@@ -181,7 +181,7 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
-        private void dirButton_Click(object sender, EventArgs e)
+        private void DirButton_Click(object sender, EventArgs e)
         {
             // making the textbox checking
             if (!this.HasDir && (dirTextBox.Text.ToString() == String.Empty))
@@ -217,7 +217,7 @@ namespace Xisom.ReDesigned.FaceDetector
             if (this.HasDir)
             {
                 // getting the images from the directory
-                int numOfImages = imageDirLoading(this.DirString);
+                int numOfImages = ImageDirLoading(this.DirString);
 
                 // setting the label
                 dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
@@ -227,44 +227,44 @@ namespace Xisom.ReDesigned.FaceDetector
                     mainProgressBar.Maximum = numOfImages;
                     this.CurrentRowID = 0;
                     ShowHideButtons(true);
-                    mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
                 }
             }
         }
 
 
-        private void prevButton_Click(object sender, EventArgs e)
+        private void PrevButton_Click(object sender, EventArgs e)
         {
             if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
             {
                 this.CurrentRowID = this.ImageFilelist.Length - 1;
             }
             this.CurrentRowID--;
-            mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
             mainProgressBar.Value = CurrentRowID;
             this.Hasprocessed = false;
         }
 
-        private void nextButton_Click(object sender, EventArgs e)
+        private void NextButton_Click(object sender, EventArgs e)
         {
             if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
             {
                 this.CurrentRowID = 0;
             }
             this.CurrentRowID++;
-            mainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
             mainProgressBar.Value = CurrentRowID;
             this.Hasprocessed = false;
         }
         /// <summary>
         /// initiallization of the Dataset obj for the main dataGridView
         /// </summary>
-        public void initDataset()
+        public void InitDataset()
         {
             this.MainDataSet = new DataSet();
             this.MainTable = new DataTable();
 
-            DataColumn rowid = new DataColumn("Row ID");
+            DataColumn rowid = new DataColumn("Row ID",typeof(int));
             DataColumn filename = new DataColumn("File Name");
             DataColumn numberofFaces = new DataColumn("Detected Face Number");
             DataColumn detectedfaces = new DataColumn("Detected Face(s)");
@@ -290,7 +290,7 @@ namespace Xisom.ReDesigned.FaceDetector
         /// function updating the Dataset for both single and auto processing 
         /// </summary>
         /// <param name="rowData">ProcessedRowData obj </param>
-        public void updateDataset(ProcessedRowData rowData)
+        public void UpdateDataset(ProcessedRowData rowData)
         {
             DataRow dataRow = this.MainTable.NewRow();
             dataRow["Row ID"] = rowData.RowID.ToString();
@@ -306,13 +306,13 @@ namespace Xisom.ReDesigned.FaceDetector
 
 
 
-        private void detectButton_Click(object sender, EventArgs e)
+        private void DetectButton_Click(object sender, EventArgs e)
         {
             if (this.HasDir && !this.Hasprocessed)
             {
 
                 ShowHideButtons(false);
-                this.commonDetect();
+                this.CommonDetect();
                 ShowHideButtons(true);
             }
         }
@@ -320,7 +320,7 @@ namespace Xisom.ReDesigned.FaceDetector
         /// <summary>
         /// function for detection 
         /// </summary>
-        private void commonDetect()
+        private void CommonDetect()
         {
 
             loadButton.Visible = false;
@@ -328,16 +328,16 @@ namespace Xisom.ReDesigned.FaceDetector
             string filename = this.ImageFilelist[id];
 
             // getting the detected faces
-            Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+            Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
 
             //making the row data
             ProcessedRowData data = new ProcessedRowData(id, filename, faces);
 
             //setting the images in picturebox
-            mainPictureBoxImageSet(FaceDetector.getFaceDetectedBitmapImage(filename));
+            MainPictureBoxImageSet(FaceDetector.GetFaceDetectedBitmapImage(filename));
 
             // adding the result in datagridview
-            updateDataset(data);
+            UpdateDataset(data);
 
             //updating UI
             this.Hasprocessed = true;
@@ -350,13 +350,14 @@ namespace Xisom.ReDesigned.FaceDetector
         /// function for the detection of the data.
         /// </summary>
         /// <returns> bool for confrimation is the data was saved</returns>
-        private bool saveProgramState()
+        private bool SaveProgramState()
         {
             bool hasSaved = false;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "xml files (*.xml)|*.xml";
-            saveFileDialog1.RestoreDirectory = true;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "xml files (*.xml)|*.xml",
+                RestoreDirectory = true
+            };
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
             {
@@ -377,12 +378,12 @@ namespace Xisom.ReDesigned.FaceDetector
         /// program loading fucntions
         /// </summary>
         /// <param name="saveData"></param>
-        private void loadProgramState(SaveData saveData)
+        private void LoadProgramState(SaveData saveData)
         {
             loadButton.Visible = false;
             this.MainDataSet = saveData.MainDataSet;
             this.MainTable = this.MainDataSet.Tables[0];
-            this.setup(saveData.HasDir, saveData.DirString, saveData.CurrentRowID);
+            this.Setup(saveData.HasDir, saveData.DirString, saveData.CurrentRowID);
             mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
@@ -390,12 +391,12 @@ namespace Xisom.ReDesigned.FaceDetector
 
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             if (this.HasDir)
             {
                 ShowHideButtons(false);
-                if (saveProgramState())
+                if (SaveProgramState())
                 {
                     MessageBox.Show("Program Saved");
 
@@ -409,7 +410,7 @@ namespace Xisom.ReDesigned.FaceDetector
         }
 
 
-        private void mainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void MainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
             ShowHideButtons(false);
@@ -428,7 +429,7 @@ namespace Xisom.ReDesigned.FaceDetector
                     }
                     else
                     {
-                        loadingCellClickContent();
+                        LoadingCellClickContent();
                     }
                 }
             }
@@ -438,17 +439,19 @@ namespace Xisom.ReDesigned.FaceDetector
         /// <summary>
         /// DatagridView click handling function
         /// </summary>
-        private void loadingCellClickContent()
+        private void LoadingCellClickContent()
         {
 
-            //TODO fix clicking of selected rows
+            //TODO fix form creation mode
 
-            ProcessedRowData data = new ProcessedRowData();
-            data.RowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString());
-            data.FileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString();
+            ProcessedRowData data = new ProcessedRowData
+            {
+                RowID = int.Parse(mainDataGridView.SelectedRows[0].Cells[0].Value.ToString()),
+                FileName = mainDataGridView.SelectedRows[0].Cells[1].Value.ToString()
+            };
             data.Faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
             data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
-            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+            MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(data.FileName, data.Faces));
             ShowHideButtons(true);
             mainProgressBar.Value = data.RowID;
 
@@ -458,12 +461,12 @@ namespace Xisom.ReDesigned.FaceDetector
             }
 
             ImageDisplay imageDisplayForm = new ImageDisplay();
-            imageDisplayForm.mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(data.FileName, data.Faces));
+            imageDisplayForm.MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(data.FileName, data.Faces));
             imageDisplayForm.Show();
             
                 
         }
-        private void loadButton_Click(object sender, EventArgs e)
+        private void LoadButton_Click(object sender, EventArgs e)
         {
             ShowHideButtons(false);
 
@@ -481,7 +484,7 @@ namespace Xisom.ReDesigned.FaceDetector
                     try
                     {
                         SaveData saveData = (SaveData)reader.Deserialize(file);
-                        loadProgramState(saveData);
+                        LoadProgramState(saveData);
                     }
                     catch (Exception exp)
                     {
@@ -494,7 +497,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         }
 
-        private void autoDetectButton_Click(object sender, EventArgs e)
+        private void AutoDetectButton_Click(object sender, EventArgs e)
         {
             loadButton.Visible = false;
             dirButton.Visible = false;
@@ -531,7 +534,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         }
 
-        private void autoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void AutoProcessBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // autoprocessing main loop in the background work
 
@@ -539,7 +542,7 @@ namespace Xisom.ReDesigned.FaceDetector
             {
                 this.CurrentRowID = i;
                 string filename = this.ImageFilelist[this.CurrentRowID];
-                Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+                Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
                 ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
                 autoProcessBackgroundWorker.ReportProgress(i, data);
 
@@ -555,22 +558,20 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
-        private void autoProcessBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void AutoProcessBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            // updating UI from the background worker, sender ohject is from the autoProcessBackgroundWorker_DoWork()
+            // updating UI from the background worker, sender ohject is from the AutoProcessBackgroundWorker_DoWork()
             mainProgressBar.Value = e.ProgressPercentage;
             ProcessedRowData rowData = (ProcessedRowData)e.UserState;
-            this.updateDataset(rowData);
+            this.UpdateDataset(rowData);
             mainProgressBar.Value = rowData.RowID;
-            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(rowData.FileName, rowData.Faces));
+            MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(rowData.FileName, rowData.Faces));
             
         }
 
-        private void autoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void AutoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-            // showing the Messagebox UI for process complition. also show if cancelled.
-            MessageBox.Show("Process Finished");
             loadButton.Visible = true;
             autoDetectButton.Text = "Auto Process";
             autoDetectButton.Visible = true;
@@ -581,14 +582,16 @@ namespace Xisom.ReDesigned.FaceDetector
         }
 
         // thread Button process
-        private void threadProcessButton_Click(object sender, EventArgs e)
+        private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
 
             if (!this.ThreadFlag)
             {
                 threadProcessButton.Text = "Cancel";
-                this.MainThread = new Thread(StartThreadProcessing);
-                this.MainThread.IsBackground = true;
+                this.MainThread = new Thread(StartThreadProcessing)
+                {
+                    IsBackground = true
+                };
 
                 this.MainThread.Start();
                 this.ThreadFlag = true;
@@ -615,24 +618,22 @@ namespace Xisom.ReDesigned.FaceDetector
             try
             {
                 for (int i = 0; i < this.ImageFilelist.Length; i++)
-                {
-                    this.CurrentRowID = i;
-                    string filename = this.ImageFilelist[this.CurrentRowID];
-                    Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
-                    ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
+                    {
+                        this.CurrentRowID = i;
+                        string filename = this.ImageFilelist[this.CurrentRowID];
+                        Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
+                        ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
 
-                    //invoking main delegate finction to update UI thread
-                    this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
+                        //invoking main delegate finction to update UI thread
+                        this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
 
-                    // adding sleep to slow down for lesser cpu power load.
-                    Thread.Sleep(100);
-                }
+                        // adding sleep to slow down for lesser cpu power load.
+                        Thread.Sleep(100);
+                    }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message.ToString());
                 this.MainThread.Abort();
-                return;
             }
         }
 
@@ -650,11 +651,11 @@ namespace Xisom.ReDesigned.FaceDetector
         private void UpDateDisplayImages(ProcessedRowData processedRowData)
         {
             mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
-            this.updateDataset(processedRowData);
+            this.UpdateDataset(processedRowData);
 
             this.CurrentRowID = processedRowData.RowID;
             mainProgressBar.Value = processedRowData.RowID;
-            mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
+            MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
 
 
             if (mainProgressBar.Value == mainProgressBar.Maximum)
@@ -669,7 +670,7 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
-        private void taskProcessButton_Click(object sender, EventArgs e)
+        private void TaskProcessButton_Click(object sender, EventArgs e)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource();
             CancellationToken token = tokenSource.Token;
@@ -694,18 +695,18 @@ namespace Xisom.ReDesigned.FaceDetector
                     //datagridView
                     this.CurrentRowID = i;
                     string filename = this.ImageFilelist[this.CurrentRowID];
-                    Rect[] faces = this.FaceDetector.getDetectedFaces(filename);
+                    Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
                     ProcessedRowData processedRowData = new ProcessedRowData(this.CurrentRowID, filename, faces);
-                    this.updateDataset(processedRowData);
+                    this.UpdateDataset(processedRowData);
                     Action dataGridViewAction = new Action(() =>
                     {
-                        this.updateDataset(processedRowData);
+                        this.UpdateDataset(processedRowData);
                     });
                     mainDataGridView.Invoke(dataGridViewAction);
                     //
                     Action pictureBoxSetAction = new Action(() =>
                     {
-                        mainPictureBoxImageSet(this.FaceDetector.makeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
+                        MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(processedRowData.FileName, processedRowData.Faces));
                     });
                     mainPictureBox.Invoke(pictureBoxSetAction);
 
@@ -722,7 +723,6 @@ namespace Xisom.ReDesigned.FaceDetector
             });
             if (!this.ThreadFlag)
             {
-                Application.DoEvents();
                 Task.Run(taskAction, token);
                 this.ThreadFlag = true;
                 taskProcessbutton.Text = "Cancel";
@@ -730,7 +730,6 @@ namespace Xisom.ReDesigned.FaceDetector
             }
             else
             {
-                Application.DoEvents();
                 taskProcessbutton.Text = "Task Process";
                 tokenSource.Cancel();
                 this.ThreadFlag = false;
@@ -738,7 +737,7 @@ namespace Xisom.ReDesigned.FaceDetector
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }

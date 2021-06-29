@@ -18,7 +18,7 @@ namespace Xisom.ReDesigned.FaceDetector
         {
             InitializeComponent();
             this.Image = image;
-            mainPictureBoxImageSet(this.Image);
+            MainPictureBoxImageSet(this.Image);
         }
 
         public ImageDisplay()
@@ -26,13 +26,13 @@ namespace Xisom.ReDesigned.FaceDetector
             InitializeComponent();
         }
 
-        public void mainPictureBoxImageSet(Image image)
+        public void MainPictureBoxImageSet(Image image)
         {
             imageDisplayPictureBox.Image = image;
             imageDisplayPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
-        private void imageDisplayPictureBox_Click(object sender, EventArgs e)
+        private void ImageDisplayPictureBox_Click(object sender, EventArgs e)
         {
             this.Close();
         }
