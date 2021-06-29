@@ -757,7 +757,8 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void MainDataGridView_MouseClick(object sender, MouseEventArgs e)
         {
-            contextMenuStrip.Show(mainDataGridView,new System.Drawing.Point(e.X,e.Y));
+            if (e.Button == MouseButtons.Right)
+                contextMenuStrip.Show(mainDataGridView,new System.Drawing.Point(e.X,e.Y));
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
