@@ -29,7 +29,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private bool IsAutoprocessingStarted;
         private Thread MainThread;
         private bool ThreadFlag;
-        
+
         #endregion variables
         public MainForm()
         {
@@ -158,7 +158,7 @@ namespace Xisom.ReDesigned.FaceDetector
                 {
                     this.HasDir = true;
                     this.DirString = dirTextBox.Text.ToString();
-                    
+
                     // getting the images from the directory
                     int numOfImages = ImageDirLoading(this.DirString);
 
@@ -183,39 +183,13 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DirButton_Click(object sender, EventArgs e)
         {
-            // making the textbox checking
-            if (!this.HasDir && (dirTextBox.Text.ToString() == String.Empty))
-            {
-                this.mainFolderBrowserDialog = new FolderBrowserDialog();
-                using (this.mainFolderBrowserDialog)
-                {
-                    var result = this.mainFolderBrowserDialog.ShowDialog();
 
-                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
-                    {
-                        this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
-                        this.HasDir = true;
-                        dirTextBox.Text = this.DirString;
-                    }
-                }
-            }
-            else
-            {
-                if (Directory.Exists(dirTextBox.Text.ToString()))
-                {
-                    this.DirString = dirTextBox.Text.ToString();
-                    this.HasDir = true;
-                }
-                else
-                {
-                    MessageBox.Show("Invalid Directory Path");
-                    dirTextBox.Text = String.Empty;
-                }
 
-            }
-
-            if (this.HasDir)
+            if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString()))
             {
+                this.HasDir = true;
+                this.DirString = dirTextBox.Text.ToString();
+
                 // getting the images from the directory
                 int numOfImages = ImageDirLoading(this.DirString);
 
@@ -229,7 +203,41 @@ namespace Xisom.ReDesigned.FaceDetector
                     ShowHideButtons(true);
                     MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
                 }
+
+
             }
+            else
+            {
+                this.mainFolderBrowserDialog = new FolderBrowserDialog();
+                using (this.mainFolderBrowserDialog)
+                {
+                    var result = this.mainFolderBrowserDialog.ShowDialog();
+
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
+                    {
+                        this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
+                        this.HasDir = true;
+                        dirTextBox.Text = this.DirString;
+                    }
+
+                    // getting the images from the directory
+                    int numOfImages = ImageDirLoading(this.DirString);
+
+                    // setting the label
+                    dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                    if (numOfImages > 0)
+                    {
+                        mainProgressBar.Maximum = numOfImages;
+                        this.CurrentRowID = 0;
+                        ShowHideButtons(true);
+                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                    }
+
+                }
+            }
+
+
         }
 
 
@@ -264,7 +272,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.MainDataSet = new DataSet();
             this.MainTable = new DataTable();
 
-            DataColumn rowid = new DataColumn("Row ID",typeof(int));
+            DataColumn rowid = new DataColumn("Row ID", typeof(int));
             DataColumn filename = new DataColumn("File Name");
             DataColumn numberofFaces = new DataColumn("Detected Face Number");
             DataColumn detectedfaces = new DataColumn("Detected Face(s)");
@@ -419,7 +427,7 @@ namespace Xisom.ReDesigned.FaceDetector
             if (true) //TODO FIX THE CLICK FOR MAIN ROW
             {
                 // getting the row id selected
-                if (e.RowIndex >= 1) 
+                if (e.RowIndex >= 1)
                 {
                     mainDataGridView.Rows[e.RowIndex].Selected = true;
 
@@ -463,8 +471,8 @@ namespace Xisom.ReDesigned.FaceDetector
             ImageDisplay imageDisplayForm = new ImageDisplay();
             imageDisplayForm.MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(data.FileName, data.Faces));
             imageDisplayForm.Show();
-            
-                
+
+
         }
         private void LoadButton_Click(object sender, EventArgs e)
         {
@@ -515,7 +523,7 @@ namespace Xisom.ReDesigned.FaceDetector
                 autoDetectButton.Text = "Cancel";
                 autoDetectButton.Visible = true;
                 threadProcessButton.Visible = false;
-            
+
             }
             else
             {
@@ -526,8 +534,6 @@ namespace Xisom.ReDesigned.FaceDetector
 
                 // handling the cancellation for the process while running.
                 autoProcessBackgroundWorker.CancelAsync();
-                while (autoProcessBackgroundWorker.IsBusy)
-                    Application.DoEvents();
                 this.IsAutoprocessingStarted = false;
                 threadProcessButton.Visible = true;
             }
@@ -566,7 +572,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.UpdateDataset(rowData);
             mainProgressBar.Value = rowData.RowID;
             MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(rowData.FileName, rowData.Faces));
-            
+
         }
 
         private void AutoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -618,18 +624,18 @@ namespace Xisom.ReDesigned.FaceDetector
             try
             {
                 for (int i = 0; i < this.ImageFilelist.Length; i++)
-                    {
-                        this.CurrentRowID = i;
-                        string filename = this.ImageFilelist[this.CurrentRowID];
-                        Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
-                        ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
+                {
+                    this.CurrentRowID = i;
+                    string filename = this.ImageFilelist[this.CurrentRowID];
+                    Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
+                    ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
 
-                        //invoking main delegate finction to update UI thread
-                        this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
+                    //invoking main delegate finction to update UI thread
+                    this.Invoke(new UpDateDisplayImagesDelegate(UpDateDisplayImages), data);
 
-                        // adding sleep to slow down for lesser cpu power load.
-                        Thread.Sleep(100);
-                    }
+                    // adding sleep to slow down for lesser cpu power load.
+                    Thread.Sleep(100);
+                }
             }
             catch (Exception)
             {
@@ -672,7 +678,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void TaskProcessButton_Click(object sender, EventArgs e)
         {
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            /*CancellationTokenSource tokenSource = new CancellationTokenSource();
             CancellationToken token = tokenSource.Token;
 
 
@@ -734,18 +740,14 @@ namespace Xisom.ReDesigned.FaceDetector
                 tokenSource.Cancel();
                 this.ThreadFlag = false;
                 processLabel.Text = "Process";
-            }
+            }*/
         }
 
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
 
         private void Form1_ResizeEnd(Object sender, EventArgs e)
         {
             // resizing maindatagridview to hadle filling
-            
+
             mainDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             mainDataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             mainDataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
@@ -753,5 +755,26 @@ namespace Xisom.ReDesigned.FaceDetector
             mainDataGridView.AutoResizeColumns();
 
         }
+
+        private void MainDataGridView_MouseClick(object sender, MouseEventArgs e)
+        {
+            contextMenuStrip.Show(mainDataGridView,new System.Drawing.Point(e.X,e.Y));
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv",
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
+            {
+                CSVUtility.ToCSV(this.MainTable,saveFileDialog1.FileName.ToString());
+                MessageBox.Show("CSV Exported in "+ saveFileDialog1.FileName.ToString());
+            }
+        }
     }
+
 }

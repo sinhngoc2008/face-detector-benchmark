@@ -30,8 +30,8 @@ namespace Xisom.ReDesigned.FaceDetector
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.maintableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.mainDataGridView = new System.Windows.Forms.DataGridView();
@@ -53,7 +53,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.taskProcessbutton = new System.Windows.Forms.Button();
             this.processLabel = new System.Windows.Forms.Label();
             this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.mainContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
@@ -61,7 +61,7 @@ namespace Xisom.ReDesigned.FaceDetector
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.buttonTableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.mainContextMenuStrip.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // maintableLayoutPanel
@@ -74,12 +74,12 @@ namespace Xisom.ReDesigned.FaceDetector
             this.maintableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.maintableLayoutPanel.Controls.Add(this.mainDataGridView, 1, 0);
             this.maintableLayoutPanel.Controls.Add(this.pictureButtonTableLayoutPanel, 0, 0);
-            this.maintableLayoutPanel.Location = new System.Drawing.Point(2, 6);
+            this.maintableLayoutPanel.Location = new System.Drawing.Point(12, 11);
             this.maintableLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.maintableLayoutPanel.Name = "maintableLayoutPanel";
             this.maintableLayoutPanel.RowCount = 1;
             this.maintableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.maintableLayoutPanel.Size = new System.Drawing.Size(1130, 656);
+            this.maintableLayoutPanel.Size = new System.Drawing.Size(1474, 692);
             this.maintableLayoutPanel.TabIndex = 0;
             // 
             // mainDataGridView
@@ -87,31 +87,32 @@ namespace Xisom.ReDesigned.FaceDetector
             this.mainDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.mainDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.mainDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.mainDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.mainDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
-            this.mainDataGridView.Location = new System.Drawing.Point(681, 2);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.mainDataGridView.DefaultCellStyle = dataGridViewCellStyle4;
+            this.mainDataGridView.Location = new System.Drawing.Point(887, 2);
             this.mainDataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainDataGridView.Name = "mainDataGridView";
             this.mainDataGridView.RowHeadersWidth = 51;
             this.mainDataGridView.RowTemplate.Height = 27;
-            this.mainDataGridView.Size = new System.Drawing.Size(446, 652);
+            this.mainDataGridView.Size = new System.Drawing.Size(584, 688);
             this.mainDataGridView.TabIndex = 0;
             this.mainDataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MainDataGridView_CellClick);
+            this.mainDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainDataGridView_MouseClick);
             // 
             // pictureButtonTableLayoutPanel
             // 
@@ -135,17 +136,17 @@ namespace Xisom.ReDesigned.FaceDetector
             this.pictureButtonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 87.96191F));
             this.pictureButtonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.010202F));
             this.pictureButtonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pictureButtonTableLayoutPanel.Size = new System.Drawing.Size(672, 652);
+            this.pictureButtonTableLayoutPanel.Size = new System.Drawing.Size(878, 688);
             this.pictureButtonTableLayoutPanel.TabIndex = 1;
             // 
             // mainProgressBar
             // 
             this.mainProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mainProgressBar.Location = new System.Drawing.Point(3, 620);
+            this.mainProgressBar.Location = new System.Drawing.Point(3, 655);
             this.mainProgressBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainProgressBar.Name = "mainProgressBar";
-            this.mainProgressBar.Size = new System.Drawing.Size(531, 19);
+            this.mainProgressBar.Size = new System.Drawing.Size(696, 19);
             this.mainProgressBar.TabIndex = 0;
             // 
             // dirTextBox
@@ -154,17 +155,17 @@ namespace Xisom.ReDesigned.FaceDetector
             this.dirTextBox.Location = new System.Drawing.Point(3, 2);
             this.dirTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dirTextBox.Name = "dirTextBox";
-            this.dirTextBox.Size = new System.Drawing.Size(531, 25);
+            this.dirTextBox.Size = new System.Drawing.Size(696, 25);
             this.dirTextBox.TabIndex = 1;
             this.dirTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CheckEnter);
             // 
             // dirButton
             // 
             this.dirButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dirButton.Location = new System.Drawing.Point(540, 2);
+            this.dirButton.Location = new System.Drawing.Point(705, 2);
             this.dirButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dirButton.Name = "dirButton";
-            this.dirButton.Size = new System.Drawing.Size(129, 41);
+            this.dirButton.Size = new System.Drawing.Size(170, 44);
             this.dirButton.TabIndex = 2;
             this.dirButton.Text = "Browse";
             this.dirButton.UseVisualStyleBackColor = true;
@@ -175,10 +176,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.mainPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.mainPictureBox.Location = new System.Drawing.Point(3, 47);
+            this.mainPictureBox.Location = new System.Drawing.Point(3, 50);
             this.mainPictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(531, 569);
+            this.mainPictureBox.Size = new System.Drawing.Size(696, 601);
             this.mainPictureBox.TabIndex = 3;
             this.mainPictureBox.TabStop = false;
             // 
@@ -197,7 +198,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.buttonTableLayoutPanel.Controls.Add(this.dirImgCountLabel, 0, 0);
             this.buttonTableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 0, 6);
             this.buttonTableLayoutPanel.Controls.Add(this.taskProcessbutton, 0, 5);
-            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(540, 47);
+            this.buttonTableLayoutPanel.Location = new System.Drawing.Point(705, 50);
             this.buttonTableLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonTableLayoutPanel.Name = "buttonTableLayoutPanel";
             this.buttonTableLayoutPanel.RowCount = 10;
@@ -211,7 +212,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.buttonTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.buttonTableLayoutPanel.Size = new System.Drawing.Size(129, 569);
+            this.buttonTableLayoutPanel.Size = new System.Drawing.Size(170, 601);
             this.buttonTableLayoutPanel.TabIndex = 4;
             // 
             // loadButton
@@ -219,10 +220,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadButton.Location = new System.Drawing.Point(3, 506);
+            this.loadButton.Location = new System.Drawing.Point(3, 542);
             this.loadButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(123, 61);
+            this.loadButton.Size = new System.Drawing.Size(164, 57);
             this.loadButton.TabIndex = 0;
             this.loadButton.Text = "Load";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -233,10 +234,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.detectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectButton.Location = new System.Drawing.Point(3, 58);
+            this.detectButton.Location = new System.Drawing.Point(3, 62);
             this.detectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.detectButton.Name = "detectButton";
-            this.detectButton.Size = new System.Drawing.Size(123, 52);
+            this.detectButton.Size = new System.Drawing.Size(164, 56);
             this.detectButton.TabIndex = 1;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
@@ -247,10 +248,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.autoDetectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.autoDetectButton.Location = new System.Drawing.Point(3, 114);
+            this.autoDetectButton.Location = new System.Drawing.Point(3, 122);
             this.autoDetectButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.autoDetectButton.Name = "autoDetectButton";
-            this.autoDetectButton.Size = new System.Drawing.Size(123, 52);
+            this.autoDetectButton.Size = new System.Drawing.Size(164, 56);
             this.autoDetectButton.TabIndex = 2;
             this.autoDetectButton.Text = "Auto Detect";
             this.autoDetectButton.UseVisualStyleBackColor = true;
@@ -261,10 +262,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.threadProcessButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.threadProcessButton.Location = new System.Drawing.Point(3, 226);
+            this.threadProcessButton.Location = new System.Drawing.Point(3, 242);
             this.threadProcessButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.threadProcessButton.Name = "threadProcessButton";
-            this.threadProcessButton.Size = new System.Drawing.Size(123, 52);
+            this.threadProcessButton.Size = new System.Drawing.Size(164, 56);
             this.threadProcessButton.TabIndex = 4;
             this.threadProcessButton.Text = "Thread Process";
             this.threadProcessButton.UseVisualStyleBackColor = true;
@@ -275,10 +276,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.Location = new System.Drawing.Point(3, 450);
+            this.saveButton.Location = new System.Drawing.Point(3, 482);
             this.saveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(123, 52);
+            this.saveButton.Size = new System.Drawing.Size(164, 56);
             this.saveButton.TabIndex = 4;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -292,7 +293,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.dirImgCountLabel.AutoSize = true;
             this.dirImgCountLabel.Location = new System.Drawing.Point(3, 0);
             this.dirImgCountLabel.Name = "dirImgCountLabel";
-            this.dirImgCountLabel.Size = new System.Drawing.Size(123, 56);
+            this.dirImgCountLabel.Size = new System.Drawing.Size(164, 60);
             this.dirImgCountLabel.TabIndex = 5;
             this.dirImgCountLabel.Text = "TOTAL IMG";
             this.dirImgCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -307,13 +308,13 @@ namespace Xisom.ReDesigned.FaceDetector
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.prevButton, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.nextButton, 1, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 338);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 362);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(123, 52);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(164, 56);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // prevButton
@@ -324,7 +325,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.prevButton.Location = new System.Drawing.Point(3, 2);
             this.prevButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.prevButton.Name = "prevButton";
-            this.prevButton.Size = new System.Drawing.Size(55, 48);
+            this.prevButton.Size = new System.Drawing.Size(76, 52);
             this.prevButton.TabIndex = 0;
             this.prevButton.Text = "<<";
             this.prevButton.UseVisualStyleBackColor = true;
@@ -335,10 +336,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.nextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.nextButton.Location = new System.Drawing.Point(64, 2);
+            this.nextButton.Location = new System.Drawing.Point(85, 2);
             this.nextButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(56, 48);
+            this.nextButton.Size = new System.Drawing.Size(76, 52);
             this.nextButton.TabIndex = 1;
             this.nextButton.Text = ">>";
             this.nextButton.UseVisualStyleBackColor = true;
@@ -349,10 +350,10 @@ namespace Xisom.ReDesigned.FaceDetector
             this.taskProcessbutton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.taskProcessbutton.Location = new System.Drawing.Point(3, 284);
+            this.taskProcessbutton.Location = new System.Drawing.Point(3, 304);
             this.taskProcessbutton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.taskProcessbutton.Name = "taskProcessbutton";
-            this.taskProcessbutton.Size = new System.Drawing.Size(123, 48);
+            this.taskProcessbutton.Size = new System.Drawing.Size(164, 52);
             this.taskProcessbutton.TabIndex = 7;
             this.taskProcessbutton.Text = "Task Process";
             this.taskProcessbutton.UseVisualStyleBackColor = true;
@@ -364,9 +365,9 @@ namespace Xisom.ReDesigned.FaceDetector
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.processLabel.AutoSize = true;
-            this.processLabel.Location = new System.Drawing.Point(540, 618);
+            this.processLabel.Location = new System.Drawing.Point(705, 653);
             this.processLabel.Name = "processLabel";
-            this.processLabel.Size = new System.Drawing.Size(129, 34);
+            this.processLabel.Size = new System.Drawing.Size(170, 35);
             this.processLabel.TabIndex = 5;
             this.processLabel.Text = "Process";
             this.processLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -379,20 +380,20 @@ namespace Xisom.ReDesigned.FaceDetector
             this.autoProcessBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.AutoProcessBackgroundWorker_ProgressChanged);
             this.autoProcessBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AutoProcessBackgroundWorker_RunWorkerCompleted);
             // 
-            // mainContextMenuStrip
+            // contextMenuStrip
             // 
-            this.mainContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.mainContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
-            this.mainContextMenuStrip.Name = "mainContextMenuStrip";
-            this.mainContextMenuStrip.Size = new System.Drawing.Size(103, 28);
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(211, 56);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(102, 24);
-            this.toolStripMenuItem1.Text = "Exit";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItem1.Text = "SaveAsCSV";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // MainForm
             // 
@@ -400,8 +401,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1136, 664);
-            this.ContextMenuStrip = this.mainContextMenuStrip;
+            this.ClientSize = new System.Drawing.Size(1498, 714);
             this.Controls.Add(this.maintableLayoutPanel);
             this.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -417,7 +417,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.buttonTableLayoutPanel.ResumeLayout(false);
             this.buttonTableLayoutPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.mainContextMenuStrip.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -443,9 +443,9 @@ namespace Xisom.ReDesigned.FaceDetector
         private System.Windows.Forms.Button nextButton;
         private System.Windows.Forms.Button taskProcessbutton;
         private System.ComponentModel.BackgroundWorker autoProcessBackgroundWorker;
-        private System.Windows.Forms.ContextMenuStrip mainContextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Label processLabel;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 
