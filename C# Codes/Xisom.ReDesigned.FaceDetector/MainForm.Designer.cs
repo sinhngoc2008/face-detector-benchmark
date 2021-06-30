@@ -55,6 +55,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.autoProcessBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.pictureButtonTableLayoutPanel.SuspendLayout();
@@ -384,9 +385,10 @@ namespace Xisom.ReDesigned.FaceDetector
             // 
             this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(152, 28);
+            this.contextMenuStrip.Size = new System.Drawing.Size(152, 52);
             // 
             // toolStripMenuItem1
             // 
@@ -394,6 +396,13 @@ namespace Xisom.ReDesigned.FaceDetector
             this.toolStripMenuItem1.Size = new System.Drawing.Size(151, 24);
             this.toolStripMenuItem1.Text = "SaveAsCSV";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(151, 24);
+            this.toolStripMenuItem2.Text = "Clear";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // MainForm
             // 
@@ -446,6 +455,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private System.Windows.Forms.Label processLabel;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

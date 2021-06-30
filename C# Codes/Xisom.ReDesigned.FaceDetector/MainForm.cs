@@ -21,19 +21,18 @@ namespace Xisom.ReDesigned.FaceDetector
         private string DirString;
         private string[] ImageFilelist;
         private int CurrentRowID;
-        private FolderBrowserDialog mainFolderBrowserDialog;
         private DataSet MainDataSet;
         private DataTable MainTable;
-        private bool Hasprocessed;
         private FaceDetector FaceDetector;
         private Thread MainThread;
         private bool ThreadFlag;
         private Action MainAction;
         private CancellationTokenSource MainCancellationTokenSource;
         private CancellationToken MainCancellationToken;
-
+        
         // process lock
-        private readonly object ProcessLock = new object();
+        private object ProcessLock = new Object();
+        private TimeSpan TTimeout = TimeSpan.FromMilliseconds(0);
         private bool LockTaken;
         private bool IsInitialized; 
 
@@ -49,7 +48,6 @@ namespace Xisom.ReDesigned.FaceDetector
             this.UpdateStyles();
             //initial Setup for the function call 
             this.Setup(false, string.Empty, 0);
-            this.Hasprocessed = false;
 
             //initialization for the facedetector
             this.FaceDetector = new FaceDetector();
@@ -63,7 +61,11 @@ namespace Xisom.ReDesigned.FaceDetector
             // thread initialization
 
             this.ThreadFlag = false;
-            
+            this.MainThread = new Thread(StartThreadProcessing)
+            {
+                IsBackground = true
+            };
+
             // Task
             this.MainCancellationTokenSource = new CancellationTokenSource();
             this.MainCancellationToken = this.MainCancellationTokenSource.Token;
@@ -71,6 +73,7 @@ namespace Xisom.ReDesigned.FaceDetector
             // initlization of the locks
             this.LockTaken = false;
             this.IsInitialized = false;
+            
         }
 
         /// <summary>
@@ -145,36 +148,40 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void CheckEnter(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (e.KeyChar == (char)13)
+                Monitor.TryEnter(this.ProcessLock,this.TTimeout,ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    this.HasDir = Directory.Exists(dirTextBox.Text);
-                    if (this.HasDir)
+                    if ((e.KeyChar == (char)13) & !this.ThreadFlag)
                     {
-                        this.HasDir = true;
-                        this.DirString = dirTextBox.Text.ToString();
-
-                        // getting the images from the directory
-                        int numOfImages = ImageDirLoading(this.DirString);
-
-                        // setting the label
-                        dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
-
-                        if (numOfImages > 0)
+                        this.HasDir = Directory.Exists(dirTextBox.Text);
+                        if (this.HasDir)
                         {
-                            mainProgressBar.Maximum = numOfImages;
-                            this.CurrentRowID = 0;
-                            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                            this.HasDir = true;
+                            this.DirString = dirTextBox.Text.ToString();
+
+                            // getting the images from the directory
+                            int numOfImages = ImageDirLoading(this.DirString);
+
+                            // setting the label
+                            dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                            if (numOfImages > 0)
+                            {
+                                mainProgressBar.Maximum = numOfImages;
+                                this.CurrentRowID = 0;
+                                MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                            }
+                            this.IsInitialized = true;
                         }
-                        this.IsInitialized = true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Not a Valid Directory");
+                        else
+                        {
+                            MessageBox.Show("Not a Valid Directory");
+                        }
                     }
                 }
+                
             }
             catch (Exception exception)
             {
@@ -193,42 +200,17 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DirButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock,ref this.LockTaken);
+           
             try
             {
-                if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString()))
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    this.HasDir = true;
-                    this.DirString = dirTextBox.Text.ToString();
 
-                    // getting the images from the directory
-                    int numOfImages = ImageDirLoading(this.DirString);
-
-                    // setting the label
-                    dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
-
-                    if (numOfImages > 0)
+                    if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString())&& !this.ThreadFlag)
                     {
-                        mainProgressBar.Maximum = numOfImages;
-                        this.CurrentRowID = 0;
-                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-                    }
-
-
-                }
-                else
-                {
-                    this.mainFolderBrowserDialog = new FolderBrowserDialog();
-                    using (this.mainFolderBrowserDialog)
-                    {
-                        var result = this.mainFolderBrowserDialog.ShowDialog();
-
-                        if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
-                        {
-                            this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
-                            this.HasDir = true;
-                            dirTextBox.Text = this.DirString;
-                        }
+                        this.HasDir = true;
+                        this.DirString = dirTextBox.Text.ToString();
 
                         // getting the images from the directory
                         int numOfImages = ImageDirLoading(this.DirString);
@@ -264,20 +246,24 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void PrevButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
+            
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if(this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
-                {
-                        this.CurrentRowID = this.ImageFilelist.Length - 1;
+                    if (this.HasDir && this.IsInitialized && !this.ThreadFlag)
+                    {
+                        if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
+                        {
+                            this.CurrentRowID = this.ImageFilelist.Length - 1;
+                        }
+                        this.CurrentRowID--;
+                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                        mainProgressBar.Value = CurrentRowID;
                     }
-                    this.CurrentRowID--;
-                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-                    mainProgressBar.Value = CurrentRowID;
-                    this.Hasprocessed = false;
                 }
+               
             }
             catch (Exception exception)
             {
@@ -296,20 +282,24 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void NextButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
+            
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
+                    if (this.HasDir && this.IsInitialized && !this.ThreadFlag)
                     {
-                        this.CurrentRowID = 0;
+                        if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
+                        {
+                            this.CurrentRowID = 0;
+                        }
+                        this.CurrentRowID++;
+                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                        mainProgressBar.Value = CurrentRowID;
                     }
-                    this.CurrentRowID++;
-                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-                    mainProgressBar.Value = CurrentRowID;
-                    this.Hasprocessed = false;
                 }
+               
             }
             catch (Exception exception)
             {
@@ -377,13 +367,17 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DetectButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (this.HasDir && !this.Hasprocessed && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    this.CommonDetect();
+                    if (this.HasDir && this.IsInitialized && !this.ThreadFlag)
+                    {
+                        this.CommonDetect();
+                    }
                 }
+  
             }
             catch (Exception exception)
             {
@@ -422,7 +416,6 @@ namespace Xisom.ReDesigned.FaceDetector
             UpdateDataset(data);
 
             //updating UI
-            this.Hasprocessed = true;
             mainProgressBar.Value = this.CurrentRowID;
             mainProgressBar.Update();
         }
@@ -472,22 +465,26 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if (SaveProgramState())
+                    if (this.HasDir && this.IsInitialized && !this.ThreadFlag)
                     {
-                        MessageBox.Show("Program Saved");
+                        if (SaveProgramState())
+                        {
+                            MessageBox.Show("Program Saved");
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error Occoured");
+                        }
 
                     }
-                    else
-                    {
-                        MessageBox.Show("Error Occoured");
-                    }
-                    
                 }
+               
             }
             catch (Exception exception)
             {
@@ -507,7 +504,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void MainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             if (true) //TODO FIX THE CLICK FOR MAIN ROW
@@ -561,32 +558,39 @@ namespace Xisom.ReDesigned.FaceDetector
         }
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    loadOpenFileDialog.Filter = "XML files (*.xml)|*.xml";
-                    loadOpenFileDialog.FilterIndex = 2;
-
-                    if (loadOpenFileDialog.ShowDialog() == DialogResult.OK)
+                    if (!this.ThreadFlag)
                     {
-
-                        XmlSerializer reader = new XmlSerializer(typeof(SaveData));
-                        StreamReader file = new StreamReader(loadOpenFileDialog.FileName);
-
-                        try
+                        using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
                         {
-                            SaveData saveData = (SaveData)reader.Deserialize(file);
-                            LoadProgramState(saveData);
+                            loadOpenFileDialog.Filter = "XML files (*.xml)|*.xml";
+                            loadOpenFileDialog.FilterIndex = 2;
+
+                            if (loadOpenFileDialog.ShowDialog() == DialogResult.OK)
+                            {
+
+                                XmlSerializer reader = new XmlSerializer(typeof(SaveData));
+                                StreamReader file = new StreamReader(loadOpenFileDialog.FileName);
+
+                                try
+                                {
+                                    SaveData saveData = (SaveData)reader.Deserialize(file);
+                                    LoadProgramState(saveData);
+                                }
+                                catch (Exception exp)
+                                {
+                                    MessageBox.Show(exp.ToString());
+                                }
+                                file.Close();
+                            }
                         }
-                        catch (Exception exp)
-                        {
-                            MessageBox.Show(exp.ToString());
-                        }
-                        file.Close();
                     }
                 }
+
             }
             catch (Exception exception)
             {
@@ -605,31 +609,42 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoDetectButton_Click(object sender, EventArgs e)
         {
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if (!this.ThreadFlag)
+                    
+                    if (this.HasDir && this.IsInitialized )
                     {
-                        processLabel.Text = "BackGround Processing";
-                        mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
+                        
+                        if (!this.ThreadFlag)
+                        {
+                            processLabel.Text = "BackGround Processing";
+                            mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
 
-                        // running the procces in background. 
-                        autoProcessBackgroundWorker.RunWorkerAsync();
-                        this.ThreadFlag = true;
-                        autoDetectButton.Text = "Cancel";
+                            // running the procces in background. 
+                            autoProcessBackgroundWorker.RunWorkerAsync();
+                            this.ThreadFlag = true;
+                            autoDetectButton.Text = "Cancel";
+                            threadProcessButton.Enabled = false;
+                            taskProcessbutton.Enabled = false;
 
-                    }
-                    else
-                    {
-                        processLabel.Text = "Process";
-                        autoDetectButton.Text = "Auto Process";
-                        // handling the cancellation for the process while running.
-                        autoProcessBackgroundWorker.CancelAsync();
-                        this.ThreadFlag = false;
+                        }
+                        else
+                        {
+                            processLabel.Text = "Process";
+                            autoDetectButton.Text = "Auto Process";
+                            // handling the cancellation for the process while running.
+                            autoProcessBackgroundWorker.CancelAsync();
+                            this.ThreadFlag = false;
+                            threadProcessButton.Enabled = true;
+                            taskProcessbutton.Enabled = true;
+
+                        }
                     }
                 }
+               
 
             }
             catch (Exception exception)
@@ -684,7 +699,9 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            threadProcessButton.Enabled = true;
+            taskProcessbutton.Enabled = true;
+            this.ThreadFlag = false;
             autoDetectButton.Text = "Auto Process";
             processLabel.Text = "Process";
         }
@@ -693,30 +710,38 @@ namespace Xisom.ReDesigned.FaceDetector
         private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
 
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if (!this.ThreadFlag)
+                    if (this.HasDir && this.IsInitialized)
                     {
-                        threadProcessButton.Text = "Cancel";
-                        this.MainThread = new Thread(StartThreadProcessing)
+                        if (!this.ThreadFlag)
                         {
-                            IsBackground = true
-                        };
+                            threadProcessButton.Text = "Cancel";
+                            this.MainThread = new Thread(StartThreadProcessing)
+                            {
+                                IsBackground = true
+                            };
 
-                        this.MainThread.Start();
-                        this.ThreadFlag = true;
-                        processLabel.Text = "Thread Processing";
+                            this.MainThread.Start();
+                            this.ThreadFlag = true;
+                            processLabel.Text = "Thread Processing";
+                            autoDetectButton.Enabled = false;
+                            taskProcessbutton.Enabled = false;
+                        }
+                        else
+                        {
+                            threadProcessButton.Text = "Thread Process";
+                            if (this.MainThread.IsAlive) { this.MainThread.Abort();}
+                            this.ThreadFlag = false;
+                            processLabel.Text = "Process";
+                            autoDetectButton.Enabled = true;
+                            taskProcessbutton.Enabled = true;
+                        }
                     }
-                    else
-                    {
-                        threadProcessButton.Text = "Thread Process";
-                        this.MainThread.Abort();
-                        this.ThreadFlag = false;
-                        processLabel.Text = "Process";
-                    }
+
                 }
             }
             catch (Exception exception)
@@ -755,13 +780,26 @@ namespace Xisom.ReDesigned.FaceDetector
                     // adding sleep to slow down for lesser cpu power load.
                     Thread.Sleep(100);
                 }
+
             }
             catch (Exception)
             {
                 this.MainThread.Abort();
             }
+            finally
+            {
+                this.Invoke(new FinalThreadActivationDeligation(FinalThreadActivation));
+            }
         }
-
+        private delegate void FinalThreadActivationDeligation();
+        private void FinalThreadActivation()
+        {
+            processLabel.Text = "Process";
+            threadProcessButton.Text = "Thread Process";
+            autoDetectButton.Enabled = true;
+            taskProcessbutton.Enabled = true;
+            this.ThreadFlag = false;
+        }
 
         /// <summary>
         /// delegate function to update UI from background thread 
@@ -840,29 +878,47 @@ namespace Xisom.ReDesigned.FaceDetector
                     Thread.Sleep(100);
 
                 }
-
+                Action finalAction = new Action(() =>
+                {
+                    processLabel.Text = "Process";
+                    taskProcessbutton.Text = "Task Process";
+                    autoDetectButton.Enabled = true;
+                    threadProcessButton.Enabled = true;
+                    this.ThreadFlag = false;
+                });
+                this.Invoke(finalAction);
             });
 
-            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
+            
             try
             {
-                if (this.HasDir && this.IsInitialized)
+                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                if (this.LockTaken)
                 {
-                    if (!this.ThreadFlag)
+                    if (this.HasDir && this.IsInitialized)
                     {
-                        Task.Run(MainAction, MainCancellationToken);
-                        this.ThreadFlag = true;
-                        taskProcessbutton.Text = "Cancel";
-                        processLabel.Text = "Task Processing";
-                    }
-                    else
-                    {
-                        taskProcessbutton.Text = "Task Process";
-                        MainCancellationTokenSource.Cancel();
-                        this.ThreadFlag = false;
-                        processLabel.Text = "Process";
+                        if (!this.ThreadFlag)
+                        {
+                            Task.Run(MainAction, MainCancellationToken);
+                            this.ThreadFlag = true;
+                            taskProcessbutton.Text = "Cancel";
+                            processLabel.Text = "Task Processing";
+                            autoDetectButton.Enabled = false;
+                            threadProcessButton.Enabled = false;
+
+                        }
+                        else
+                        {
+                            taskProcessbutton.Text = "Task Process";
+                            MainCancellationTokenSource.Cancel();
+                            this.ThreadFlag = false;
+                            processLabel.Text = "Process";
+                            autoDetectButton.Enabled = true;
+                            threadProcessButton.Enabled = true;
+                        }
                     }
                 }
+                
             }
             catch (Exception exception)
             {
@@ -918,6 +974,14 @@ namespace Xisom.ReDesigned.FaceDetector
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            this.MainDataSet = null;
+            mainDataGridView.DataSource = null;
+            mainDataGridView.Update();
+            this.InitDataset();
         }
     }
 
