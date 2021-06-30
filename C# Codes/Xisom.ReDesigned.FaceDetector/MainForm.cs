@@ -145,13 +145,13 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void CheckEnter(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
-                if (e.KeyChar == (char)13 && this.IsInitialized)
+                if (e.KeyChar == (char)13)
                 {
                     this.HasDir = Directory.Exists(dirTextBox.Text);
-                    if (HasDir)
+                    if (this.HasDir)
                     {
                         this.HasDir = true;
                         this.DirString = dirTextBox.Text.ToString();
@@ -193,7 +193,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DirButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock,ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock,ref this.LockTaken);
             try
             {
                 if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString()))
@@ -264,7 +264,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void PrevButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
@@ -296,7 +296,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void NextButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
@@ -377,7 +377,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DetectButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && !this.Hasprocessed && this.IsInitialized)
@@ -472,7 +472,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
@@ -561,7 +561,7 @@ namespace Xisom.ReDesigned.FaceDetector
         }
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
@@ -605,7 +605,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoDetectButton_Click(object sender, EventArgs e)
         {
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
@@ -693,7 +693,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
 
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
@@ -843,7 +843,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
             });
 
-            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            Monitor.TryEnter(this.ProcessLock, ref this.LockTaken);
             try
             {
                 if (this.HasDir && this.IsInitialized)
