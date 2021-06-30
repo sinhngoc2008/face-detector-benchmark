@@ -26,9 +26,17 @@ namespace Xisom.ReDesigned.FaceDetector
         private DataTable MainTable;
         private bool Hasprocessed;
         private FaceDetector FaceDetector;
-        private bool IsAutoprocessingStarted;
         private Thread MainThread;
         private bool ThreadFlag;
+        private Action MainAction;
+        private CancellationTokenSource MainCancellationTokenSource;
+        private CancellationToken MainCancellationToken;
+
+        // process lock
+        private readonly object ProcessLock = new object();
+        private bool LockTaken;
+        private bool IsInitialized; 
+
 
         #endregion variables
         public MainForm()
@@ -46,39 +54,25 @@ namespace Xisom.ReDesigned.FaceDetector
             //initialization for the facedetector
             this.FaceDetector = new FaceDetector();
 
-            //Autoprocessing Started flag set, buttons removing, Datagridview virtual mode for memory saving
-            ShowHideButtons(false);
+            //Datagridview virtual mode for memory saving
             mainDataGridView.VirtualMode = true;
-            this.IsAutoprocessingStarted = false;
 
             // dataset initlization
             InitDataset();
 
-            // thread
+            // thread initialization
 
             this.ThreadFlag = false;
-            threadProcessButton.Visible = false;
+            
+            // Task
+            this.MainCancellationTokenSource = new CancellationTokenSource();
+            this.MainCancellationToken = this.MainCancellationTokenSource.Token;
 
-
+            // initlization of the locks
+            this.LockTaken = false;
+            this.IsInitialized = false;
         }
 
-        /// <summary>
-        /// an unified fuction to cluster all the prev, next, detect button visible, remove conditions
-        /// </summary>
-        /// <param name="value"> bool value for all buttons visibility </param>
-        private void ShowHideButtons(bool value)
-        {
-
-            // the common buttons in the program to handle save/load/delete visibility {====}
-
-            prevButton.Visible = value;
-            nextButton.Visible = value;
-            detectButton.Visible = value;
-            saveButton.Visible = value;
-            autoDetectButton.Visible = value;
-            threadProcessButton.Visible = value;
-            taskProcessbutton.Visible = value;
-        }
         /// <summary>
         /// mainPictureBox Image set with the given file URL 
         /// </summary>
@@ -111,6 +105,7 @@ namespace Xisom.ReDesigned.FaceDetector
 
                 if (this.ImageFilelist.Length > 0)
                 {
+                    this.IsInitialized = true;
                     return this.ImageFilelist.Length;
                 }
                 else
@@ -140,21 +135,68 @@ namespace Xisom.ReDesigned.FaceDetector
             {
                 mainProgressBar.Maximum = numOfImages;
                 this.CurrentRowID = 0;
-                ShowHideButtons(true);
                 MainPictureBoxImageSet(this.ImageFilelist[currentRowID]);
             }
             mainDataGridView.Update();
             mainProgressBar.Value = this.CurrentRowID;
-            threadProcessButton.Visible = true;
+            this.IsInitialized = true;
         }
 
 
         private void CheckEnter(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)13)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                this.HasDir = Directory.Exists(dirTextBox.Text);
-                if (HasDir)
+                if (e.KeyChar == (char)13 && this.IsInitialized)
+                {
+                    this.HasDir = Directory.Exists(dirTextBox.Text);
+                    if (HasDir)
+                    {
+                        this.HasDir = true;
+                        this.DirString = dirTextBox.Text.ToString();
+
+                        // getting the images from the directory
+                        int numOfImages = ImageDirLoading(this.DirString);
+
+                        // setting the label
+                        dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                        if (numOfImages > 0)
+                        {
+                            mainProgressBar.Maximum = numOfImages;
+                            this.CurrentRowID = 0;
+                            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                        }
+                        this.IsInitialized = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Not a Valid Directory");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+            
+        }
+
+        private void DirButton_Click(object sender, EventArgs e)
+        {
+            Monitor.Enter(this.ProcessLock,ref this.LockTaken);
+            try
+            {
+                if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString()))
                 {
                     this.HasDir = true;
                     this.DirString = dirTextBox.Text.ToString();
@@ -169,100 +211,119 @@ namespace Xisom.ReDesigned.FaceDetector
                     {
                         mainProgressBar.Maximum = numOfImages;
                         this.CurrentRowID = 0;
-                        ShowHideButtons(true);
                         MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
                     }
+
 
                 }
                 else
                 {
-                    MessageBox.Show("Not a Valid Directory");
-                }
-            }
-        }
-
-        private void DirButton_Click(object sender, EventArgs e)
-        {
-
-
-            if (!this.HasDir && Directory.Exists(dirTextBox.Text.ToString()))
-            {
-                this.HasDir = true;
-                this.DirString = dirTextBox.Text.ToString();
-
-                // getting the images from the directory
-                int numOfImages = ImageDirLoading(this.DirString);
-
-                // setting the label
-                dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
-
-                if (numOfImages > 0)
-                {
-                    mainProgressBar.Maximum = numOfImages;
-                    this.CurrentRowID = 0;
-                    ShowHideButtons(true);
-                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-                }
-
-
-            }
-            else
-            {
-                this.mainFolderBrowserDialog = new FolderBrowserDialog();
-                using (this.mainFolderBrowserDialog)
-                {
-                    var result = this.mainFolderBrowserDialog.ShowDialog();
-
-                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
+                    this.mainFolderBrowserDialog = new FolderBrowserDialog();
+                    using (this.mainFolderBrowserDialog)
                     {
-                        this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
-                        this.HasDir = true;
-                        dirTextBox.Text = this.DirString;
+                        var result = this.mainFolderBrowserDialog.ShowDialog();
+
+                        if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(mainFolderBrowserDialog.SelectedPath))
+                        {
+                            this.DirString = mainFolderBrowserDialog.SelectedPath.ToString();
+                            this.HasDir = true;
+                            dirTextBox.Text = this.DirString;
+                        }
+
+                        // getting the images from the directory
+                        int numOfImages = ImageDirLoading(this.DirString);
+
+                        // setting the label
+                        dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
+
+                        if (numOfImages > 0)
+                        {
+                            mainProgressBar.Maximum = numOfImages;
+                            this.CurrentRowID = 0;
+                            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                        }
+
                     }
-
-                    // getting the images from the directory
-                    int numOfImages = ImageDirLoading(this.DirString);
-
-                    // setting the label
-                    dirImgCountLabel.Text = "IMG COUNT: " + numOfImages;
-
-                    if (numOfImages > 0)
-                    {
-                        mainProgressBar.Maximum = numOfImages;
-                        this.CurrentRowID = 0;
-                        ShowHideButtons(true);
-                        MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-                    }
-
                 }
             }
-
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
 
         }
 
 
         private void PrevButton_Click(object sender, EventArgs e)
         {
-            if (this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                this.CurrentRowID = this.ImageFilelist.Length - 1;
+                if (this.HasDir && this.IsInitialized)
+                {
+                    if(this.CurrentRowID <= 0 || this.CurrentRowID >= this.ImageFilelist.Length - 1)
+                {
+                        this.CurrentRowID = this.ImageFilelist.Length - 1;
+                    }
+                    this.CurrentRowID--;
+                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                    mainProgressBar.Value = CurrentRowID;
+                    this.Hasprocessed = false;
+                }
             }
-            this.CurrentRowID--;
-            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-            mainProgressBar.Value = CurrentRowID;
-            this.Hasprocessed = false;
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+
         }
 
         private void NextButton_Click(object sender, EventArgs e)
         {
-            if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                this.CurrentRowID = 0;
+                if (this.HasDir && this.IsInitialized)
+                {
+                    if (this.CurrentRowID >= this.ImageFilelist.Length - 1)
+                    {
+                        this.CurrentRowID = 0;
+                    }
+                    this.CurrentRowID++;
+                    MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
+                    mainProgressBar.Value = CurrentRowID;
+                    this.Hasprocessed = false;
+                }
             }
-            this.CurrentRowID++;
-            MainPictureBoxImageSet(this.ImageFilelist[CurrentRowID]);
-            mainProgressBar.Value = CurrentRowID;
-            this.Hasprocessed = false;
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+
         }
         /// <summary>
         /// initiallization of the Dataset obj for the main dataGridView
@@ -316,13 +377,27 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void DetectButton_Click(object sender, EventArgs e)
         {
-            if (this.HasDir && !this.Hasprocessed)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-
-                ShowHideButtons(false);
-                this.CommonDetect();
-                ShowHideButtons(true);
+                if (this.HasDir && !this.Hasprocessed && this.IsInitialized)
+                {
+                    this.CommonDetect();
+                }
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+
         }
 
         /// <summary>
@@ -331,7 +406,6 @@ namespace Xisom.ReDesigned.FaceDetector
         private void CommonDetect()
         {
 
-            loadButton.Visible = false;
             int id = this.CurrentRowID;
             string filename = this.ImageFilelist[id];
 
@@ -349,7 +423,6 @@ namespace Xisom.ReDesigned.FaceDetector
 
             //updating UI
             this.Hasprocessed = true;
-            loadButton.Visible = true;
             mainProgressBar.Value = this.CurrentRowID;
             mainProgressBar.Update();
         }
@@ -388,40 +461,53 @@ namespace Xisom.ReDesigned.FaceDetector
         /// <param name="saveData"></param>
         private void LoadProgramState(SaveData saveData)
         {
-            loadButton.Visible = false;
             this.MainDataSet = saveData.MainDataSet;
             this.MainTable = this.MainDataSet.Tables[0];
             this.Setup(saveData.HasDir, saveData.DirString, saveData.CurrentRowID);
             mainDataGridView.DataSource = this.MainDataSet.Tables[0];
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             mainDataGridView.Refresh();
-            loadButton.Visible = true;
-
+            
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (this.HasDir)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                ShowHideButtons(false);
-                if (SaveProgramState())
+                if (this.HasDir && this.IsInitialized)
                 {
-                    MessageBox.Show("Program Saved");
+                    if (SaveProgramState())
+                    {
+                        MessageBox.Show("Program Saved");
 
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error Occoured");
+                    }
+                    
                 }
-                else
-                {
-                    MessageBox.Show("Error Occoured");
-                }
-                ShowHideButtons(true);
             }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+
         }
 
 
         private void MainDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
-            ShowHideButtons(false);
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             if (true) //TODO FIX THE CLICK FOR MAIN ROW
@@ -460,7 +546,6 @@ namespace Xisom.ReDesigned.FaceDetector
             data.Faces = data.setRectFromXML(mainDataGridView.SelectedRows[0].Cells[3].Value.ToString());
             data.DetectFaceNumber = int.Parse(mainDataGridView.SelectedRows[0].Cells[2].Value.ToString());
             MainPictureBoxImageSet(this.FaceDetector.MakeFaceDetectedImage(data.FileName, data.Faces));
-            ShowHideButtons(true);
             mainProgressBar.Value = data.RowID;
 
             if (Application.OpenForms.OfType<ImageDisplay>().Count() == 1)
@@ -476,66 +561,88 @@ namespace Xisom.ReDesigned.FaceDetector
         }
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            ShowHideButtons(false);
-
-            using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                loadOpenFileDialog.Filter = "XML files (*.xml)|*.xml";
-                loadOpenFileDialog.FilterIndex = 2;
-
-                if (loadOpenFileDialog.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog loadOpenFileDialog = new OpenFileDialog())
                 {
+                    loadOpenFileDialog.Filter = "XML files (*.xml)|*.xml";
+                    loadOpenFileDialog.FilterIndex = 2;
 
-                    XmlSerializer reader = new XmlSerializer(typeof(SaveData));
-                    StreamReader file = new StreamReader(loadOpenFileDialog.FileName);
+                    if (loadOpenFileDialog.ShowDialog() == DialogResult.OK)
+                    {
 
-                    try
-                    {
-                        SaveData saveData = (SaveData)reader.Deserialize(file);
-                        LoadProgramState(saveData);
+                        XmlSerializer reader = new XmlSerializer(typeof(SaveData));
+                        StreamReader file = new StreamReader(loadOpenFileDialog.FileName);
+
+                        try
+                        {
+                            SaveData saveData = (SaveData)reader.Deserialize(file);
+                            LoadProgramState(saveData);
+                        }
+                        catch (Exception exp)
+                        {
+                            MessageBox.Show(exp.ToString());
+                        }
+                        file.Close();
                     }
-                    catch (Exception exp)
-                    {
-                        MessageBox.Show(exp.ToString());
-                    }
-                    file.Close();
                 }
-
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
             }
 
         }
 
         private void AutoDetectButton_Click(object sender, EventArgs e)
         {
-            loadButton.Visible = false;
-            dirButton.Visible = false;
-
-            if (!this.IsAutoprocessingStarted)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                processLabel.Text = "BackGround Processing";
-                ShowHideButtons(false);
-                threadProcessButton.Visible = false;
-                mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
+                if (this.HasDir && this.IsInitialized)
+                {
+                    if (!this.ThreadFlag)
+                    {
+                        processLabel.Text = "BackGround Processing";
+                        mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
 
-                // running the procces in background. 
-                autoProcessBackgroundWorker.RunWorkerAsync();
-                this.IsAutoprocessingStarted = true;
-                autoDetectButton.Text = "Cancel";
-                autoDetectButton.Visible = true;
-                threadProcessButton.Visible = false;
+                        // running the procces in background. 
+                        autoProcessBackgroundWorker.RunWorkerAsync();
+                        this.ThreadFlag = true;
+                        autoDetectButton.Text = "Cancel";
+
+                    }
+                    else
+                    {
+                        processLabel.Text = "Process";
+                        autoDetectButton.Text = "Auto Process";
+                        // handling the cancellation for the process while running.
+                        autoProcessBackgroundWorker.CancelAsync();
+                        this.ThreadFlag = false;
+                    }
+                }
 
             }
-            else
+            catch (Exception exception)
             {
-                processLabel.Text = "Process";
-                autoDetectButton.Visible = false;
-                autoDetectButton.Text = "Auto Process";
-                autoDetectButton.Visible = true;
-
-                // handling the cancellation for the process while running.
-                autoProcessBackgroundWorker.CancelAsync();
-                this.IsAutoprocessingStarted = false;
-                threadProcessButton.Visible = true;
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
             }
 
         }
@@ -578,12 +685,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private void AutoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-            loadButton.Visible = true;
             autoDetectButton.Text = "Auto Process";
-            autoDetectButton.Visible = true;
-            ShowHideButtons(true);
-            dirButton.Visible = true;
-            threadProcessButton.Visible = true;
             processLabel.Text = "Process";
         }
 
@@ -591,28 +693,45 @@ namespace Xisom.ReDesigned.FaceDetector
         private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
 
-            if (!this.ThreadFlag)
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                threadProcessButton.Text = "Cancel";
-                this.MainThread = new Thread(StartThreadProcessing)
+                if (this.HasDir && this.IsInitialized)
                 {
-                    IsBackground = true
-                };
+                    if (!this.ThreadFlag)
+                    {
+                        threadProcessButton.Text = "Cancel";
+                        this.MainThread = new Thread(StartThreadProcessing)
+                        {
+                            IsBackground = true
+                        };
 
-                this.MainThread.Start();
-                this.ThreadFlag = true;
-                ShowHideButtons(false);
-                threadProcessButton.Visible = true;
-                processLabel.Text = "Thread Processing";
+                        this.MainThread.Start();
+                        this.ThreadFlag = true;
+                        processLabel.Text = "Thread Processing";
+                    }
+                    else
+                    {
+                        threadProcessButton.Text = "Thread Process";
+                        this.MainThread.Abort();
+                        this.ThreadFlag = false;
+                        processLabel.Text = "Process";
+                    }
+                }
             }
-            else
+            catch (Exception exception)
             {
-                threadProcessButton.Text = "Thread Process";
-                this.MainThread.Abort();
-                this.ThreadFlag = false;
-                processLabel.Text = "Process";
-                ShowHideButtons(true);
+                MessageBox.Show(exception.Message.ToString());
             }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+            }
+
         }
 
         /// <summary>
@@ -666,11 +785,6 @@ namespace Xisom.ReDesigned.FaceDetector
 
             if (mainProgressBar.Value == mainProgressBar.Maximum)
             {
-                autoDetectButton.Visible = true;
-                ShowHideButtons(true);
-                loadButton.Visible = true;
-                threadProcessButton.Visible = true;
-                dirButton.Visible = true;
                 threadProcessButton.Text = "Thread Process";
                 processLabel.Text = "Process";
             }
@@ -678,16 +792,23 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void TaskProcessButton_Click(object sender, EventArgs e)
         {
-            /*CancellationTokenSource tokenSource = new CancellationTokenSource();
-            CancellationToken token = tokenSource.Token;
-
-
-            Action taskAction = new Action(() =>
+            
+            this.MainAction = new Action(() =>
             {
-                // task action will have the main loop, in the loop various invokes for updating the UI elements will be called.
+                // task action will have the main loop, in the loop various invokes for updating the UI elements will be called
+
 
                 for (int i = 0; i < this.ImageFilelist.Length; i++)
                 {
+
+                    if (this.MainCancellationToken.IsCancellationRequested)
+                    {
+                        this.MainCancellationTokenSource = new CancellationTokenSource();
+                        this.MainCancellationToken = this.MainCancellationTokenSource.Token;
+                        break;
+                    }
+
+
                     // mainProgressBar
                     Action progressBarAction = new Action(() => 
                     {
@@ -716,30 +837,46 @@ namespace Xisom.ReDesigned.FaceDetector
                     mainPictureBox.Invoke(pictureBoxSetAction);
 
                     //slowing down talk for less CPU load
-                    Task.Delay(300);
-
-                    if (token.IsCancellationRequested)
-                    {
-                        break;
-                    }
+                    Thread.Sleep(100);
 
                 }
 
             });
-            if (!this.ThreadFlag)
+
+            Monitor.Enter(this.ProcessLock, ref this.LockTaken);
+            try
             {
-                Task.Run(taskAction, token);
-                this.ThreadFlag = true;
-                taskProcessbutton.Text = "Cancel";
-                processLabel.Text = "Task Processing";
+                if (this.HasDir && this.IsInitialized)
+                {
+                    if (!this.ThreadFlag)
+                    {
+                        Task.Run(MainAction, MainCancellationToken);
+                        this.ThreadFlag = true;
+                        taskProcessbutton.Text = "Cancel";
+                        processLabel.Text = "Task Processing";
+                    }
+                    else
+                    {
+                        taskProcessbutton.Text = "Task Process";
+                        MainCancellationTokenSource.Cancel();
+                        this.ThreadFlag = false;
+                        processLabel.Text = "Process";
+                    }
+                }
             }
-            else
+            catch (Exception exception)
             {
-                taskProcessbutton.Text = "Task Process";
-                tokenSource.Cancel();
-                this.ThreadFlag = false;
-                processLabel.Text = "Process";
-            }*/
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                if (this.LockTaken)
+                {
+                    Monitor.Exit(this.ProcessLock);
+                    this.LockTaken = false;
+                }
+
+            }
         }
 
 
@@ -763,16 +900,23 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            try
             {
-                Filter = "CSV files (*.csv)|*.csv",
-                RestoreDirectory = true
-            };
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    RestoreDirectory = true
+                };
 
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.FileName != string.Empty)
+                {
+                    CSVUtility.ToCSV(this.MainTable, saveFileDialog1.FileName.ToString());
+                    MessageBox.Show("CSV Exported in " + saveFileDialog1.FileName.ToString());
+                }
+            }
+            catch (Exception ex)
             {
-                CSVUtility.ToCSV(this.MainTable,saveFileDialog1.FileName.ToString());
-                MessageBox.Show("CSV Exported in "+ saveFileDialog1.FileName.ToString());
+                MessageBox.Show(ex.ToString());
             }
         }
     }

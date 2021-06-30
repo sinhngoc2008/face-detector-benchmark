@@ -8,12 +8,23 @@ using System.Threading.Tasks;
 
 namespace Xisom.ReDesigned.FaceDetector
 {
+    /// <summary>
+    ///Static CSV maker class form the dataset for C#
+    /// need to export the dataset as CSV.
+    /// 
+    /// can be extended as other extentions as (TSV,excel) too
+    /// </summary>
     public static class CSVUtility
     {
+        /// <summary>
+        /// CSV file maker static function
+        /// </summary>
+        /// <param name="dtDataTable"></param>
+        /// <param name="strFilePath"></param>
         public static void ToCSV(DataTable dtDataTable, string strFilePath)
         {
             StreamWriter streamWriter = new StreamWriter(strFilePath, false);
-            //headers    
+            // Making the headers for CSV    
             for (int i = 0; i < dtDataTable.Columns.Count; i++)
             {
                 streamWriter.Write(dtDataTable.Columns[i]);
@@ -23,13 +34,13 @@ namespace Xisom.ReDesigned.FaceDetector
                 }
             }
             streamWriter.Write(streamWriter.NewLine);
-            foreach (DataRow dr in dtDataTable.Rows)
+            foreach (DataRow dataRow in dtDataTable.Rows)
             {
                 for (int i = 0; i < dtDataTable.Columns.Count; i++)
                 {
-                    if (!Convert.IsDBNull(dr[i]))
+                    if (!Convert.IsDBNull(dataRow[i]))
                     {
-                        string value = dr[i].ToString();
+                        string value = dataRow[i].ToString();
                         if (value.Contains(','))
                         {
                             value = String.Format("\"{0}\"", value);
@@ -37,7 +48,7 @@ namespace Xisom.ReDesigned.FaceDetector
                         }
                         else
                         {
-                            streamWriter.Write(dr[i].ToString());
+                            streamWriter.Write(dataRow[i].ToString());
                         }
                     }
                     if (i < dtDataTable.Columns.Count - 1)
