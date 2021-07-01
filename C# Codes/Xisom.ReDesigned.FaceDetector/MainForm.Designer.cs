@@ -168,7 +168,7 @@ namespace Xisom.ReDesigned.FaceDetector
             this.dirButton.Name = "dirButton";
             this.dirButton.Size = new System.Drawing.Size(170, 44);
             this.dirButton.TabIndex = 2;
-            this.dirButton.Text = "Browse";
+            this.dirButton.Text = "Load";
             this.dirButton.UseVisualStyleBackColor = true;
             this.dirButton.Click += new System.EventHandler(this.DirButton_Click);
             // 
