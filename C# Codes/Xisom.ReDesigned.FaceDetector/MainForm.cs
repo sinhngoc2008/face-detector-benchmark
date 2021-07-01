@@ -34,8 +34,12 @@ namespace Xisom.ReDesigned.FaceDetector
         private object ProcessLock = new Object();
         private TimeSpan TTimeout = TimeSpan.FromMilliseconds(0);
         private bool LockTaken;
-        private bool IsInitialized; 
+        private bool IsInitialized;
 
+        // thread process flags
+        private bool BackgroundProcessRunning;
+        private bool ThreadProcessingRunning;
+        private bool TaskProcessingRunning;
 
         #endregion variables
         public MainForm()
@@ -73,8 +77,13 @@ namespace Xisom.ReDesigned.FaceDetector
             // initlization of the locks
             this.LockTaken = false;
             this.IsInitialized = false;
-            
-        }
+
+            // falg set 
+            this.BackgroundProcessRunning = false ;
+            this.ThreadProcessingRunning = false ;
+            this.TaskProcessingRunning = false ;
+
+    }
 
         /// <summary>
         /// mainPictureBox Image set with the given file URL 
@@ -609,56 +618,56 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoDetectButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
-                if (this.LockTaken)
+                try
                 {
-                    
-                    if (this.HasDir && this.IsInitialized )
+                    Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                    if (this.LockTaken)
                     {
-                        
-                        if (!this.ThreadFlag)
+
+                        if (this.HasDir && this.IsInitialized)
                         {
-                            processLabel.Text = "BackGround Processing";
-                            mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
 
-                            // running the procces in background. 
-                            autoProcessBackgroundWorker.RunWorkerAsync();
-                            this.ThreadFlag = true;
-                            autoDetectButton.Text = "Cancel";
-                            threadProcessButton.Enabled = false;
-                            taskProcessbutton.Enabled = false;
+                            if (!this.ThreadFlag)
+                            {
+                                processLabel.Text = "BackGround Processing";
+                                mainProgressBar.Maximum = this.ImageFilelist.Length - 1;
 
-                        }
-                        else
-                        {
-                            processLabel.Text = "Process";
-                            autoDetectButton.Text = "Auto Process";
-                            // handling the cancellation for the process while running.
-                            autoProcessBackgroundWorker.CancelAsync();
-                            this.ThreadFlag = false;
-                            threadProcessButton.Enabled = true;
-                            taskProcessbutton.Enabled = true;
+                                // running the procces in background. 
+                                autoProcessBackgroundWorker.RunWorkerAsync();
+                                this.ThreadFlag = true;
+                                autoDetectButton.Text = "Cancel";
+                                //threadProcessButton.Enabled = false;
+                                //taskProcessbutton.Enabled = false;
 
+                            }
+                            else
+                            {
+                                processLabel.Text = "Process";
+                                autoDetectButton.Text = "Auto Process";
+                                // handling the cancellation for the process while running.
+                                autoProcessBackgroundWorker.CancelAsync();
+                                this.ThreadFlag = false;
+                                //threadProcessButton.Enabled = true;
+                                //taskProcessbutton.Enabled = true;
+
+                            }
                         }
                     }
-                }
-               
 
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message.ToString());
-            }
-            finally
-            {
-                if (this.LockTaken)
-                {
-                    Monitor.Exit(this.ProcessLock);
-                    this.LockTaken = false;
+
                 }
-            }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message.ToString());
+                }
+                finally
+                {
+                    if (this.LockTaken)
+                    {
+                        Monitor.Exit(this.ProcessLock);
+                        this.LockTaken = false;
+                    }
+                }    
 
         }
 
@@ -666,24 +675,26 @@ namespace Xisom.ReDesigned.FaceDetector
         {
             // autoprocessing main loop in the background work
 
-            for (int i = 0; i < this.ImageFilelist.Length; i++)
-            {
-                this.CurrentRowID = i;
-                string filename = this.ImageFilelist[this.CurrentRowID];
-                Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
-                ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
-                autoProcessBackgroundWorker.ReportProgress(i, data);
 
-                // adding thread waiting for CPU usage conservation.
-                Thread.Sleep(200);
-
-                if (autoProcessBackgroundWorker.CancellationPending)
+                for (int i = 0; i < this.ImageFilelist.Length; i++)
                 {
-                    // handling cancel from button clicking
-                    break;
-                }
+                    this.CurrentRowID = i;
+                    string filename = this.ImageFilelist[this.CurrentRowID];
+                    Rect[] faces = this.FaceDetector.GetDetectedFaces(filename);
+                    ProcessedRowData data = new ProcessedRowData(this.CurrentRowID, filename, faces);
+                    autoProcessBackgroundWorker.ReportProgress(i, data);
 
-            }
+                    // adding thread waiting for CPU usage conservation.
+                    Thread.Sleep(200);
+
+                    if (autoProcessBackgroundWorker.CancellationPending)
+                    {
+                        // handling cancel from button clicking
+                        break;
+                    }
+
+                }
+            
         }
 
         private void AutoProcessBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -699,8 +710,8 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoProcessBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            threadProcessButton.Enabled = true;
-            taskProcessbutton.Enabled = true;
+            //threadProcessButton.Enabled = true;
+            //taskProcessbutton.Enabled = true;
             this.ThreadFlag = false;
             autoDetectButton.Text = "Auto Process";
             processLabel.Text = "Process";
@@ -709,54 +720,53 @@ namespace Xisom.ReDesigned.FaceDetector
         // thread Button process
         private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
-
             try
-            {
-                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
-                if (this.LockTaken)
                 {
-                    if (this.HasDir && this.IsInitialized)
+                    Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                    if (this.LockTaken)
                     {
-                        if (!this.ThreadFlag)
+                        if (this.HasDir && this.IsInitialized)
                         {
-                            threadProcessButton.Text = "Cancel";
-                            this.MainThread = new Thread(StartThreadProcessing)
+                            if (!this.ThreadFlag)
                             {
-                                IsBackground = true
-                            };
+                                threadProcessButton.Text = "Cancel";
+                                this.MainThread = new Thread(StartThreadProcessing)
+                                {
+                                    IsBackground = true
+                                };
 
-                            this.MainThread.Start();
-                            this.ThreadFlag = true;
-                            processLabel.Text = "Thread Processing";
-                            autoDetectButton.Enabled = false;
-                            taskProcessbutton.Enabled = false;
+                                this.MainThread.Start();
+                                this.ThreadFlag = true;
+                                processLabel.Text = "Thread Processing";
+                                //autoDetectButton.Enabled = false;
+                                //taskProcessbutton.Enabled = false;
+                            }
+                            else
+                            {
+                                threadProcessButton.Text = "Thread Process";
+                                if (this.MainThread.IsAlive) { this.MainThread.Abort(); }
+                                this.ThreadFlag = false;
+                                processLabel.Text = "Process";
+                                //autoDetectButton.Enabled = true;
+                                //taskProcessbutton.Enabled = true;
+                            }
                         }
-                        else
-                        {
-                            threadProcessButton.Text = "Thread Process";
-                            if (this.MainThread.IsAlive) { this.MainThread.Abort();}
-                            this.ThreadFlag = false;
-                            processLabel.Text = "Process";
-                            autoDetectButton.Enabled = true;
-                            taskProcessbutton.Enabled = true;
-                        }
+
                     }
-
                 }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message.ToString());
-            }
-            finally
-            {
-                if (this.LockTaken)
+                catch (Exception exception)
                 {
-                    Monitor.Exit(this.ProcessLock);
-                    this.LockTaken = false;
+                    MessageBox.Show(exception.Message.ToString());
                 }
-            }
-
+                finally
+                {
+                    if (this.LockTaken)
+                    {
+                        Monitor.Exit(this.ProcessLock);
+                        this.LockTaken = false;
+                    }
+                }
+     
         }
 
         /// <summary>
@@ -796,9 +806,10 @@ namespace Xisom.ReDesigned.FaceDetector
         {
             processLabel.Text = "Process";
             threadProcessButton.Text = "Thread Process";
-            autoDetectButton.Enabled = true;
-            taskProcessbutton.Enabled = true;
+            //autoDetectButton.Enabled = true;
+            //taskProcessbutton.Enabled = true;
             this.ThreadFlag = false;
+            this.LockTaken = false;
         }
 
         /// <summary>
@@ -882,8 +893,8 @@ namespace Xisom.ReDesigned.FaceDetector
                 {
                     processLabel.Text = "Process";
                     taskProcessbutton.Text = "Task Process";
-                    autoDetectButton.Enabled = true;
-                    threadProcessButton.Enabled = true;
+                    //autoDetectButton.Enabled = true;
+                    //threadProcessButton.Enabled = true;
                     this.ThreadFlag = false;
                 });
                 this.Invoke(finalAction);
@@ -903,8 +914,8 @@ namespace Xisom.ReDesigned.FaceDetector
                             this.ThreadFlag = true;
                             taskProcessbutton.Text = "Cancel";
                             processLabel.Text = "Task Processing";
-                            autoDetectButton.Enabled = false;
-                            threadProcessButton.Enabled = false;
+                            //autoDetectButton.Enabled = false;
+                            //threadProcessButton.Enabled = false;
 
                         }
                         else
@@ -913,10 +924,11 @@ namespace Xisom.ReDesigned.FaceDetector
                             MainCancellationTokenSource.Cancel();
                             this.ThreadFlag = false;
                             processLabel.Text = "Process";
-                            autoDetectButton.Enabled = true;
-                            threadProcessButton.Enabled = true;
+                            //autoDetectButton.Enabled = true;
+                            //threadProcessButton.Enabled = true;
                         }
                     }
+                    
                 }
                 
             }
