@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 
 namespace Xisom.ReDesigned.FaceDetector
 {
+    
 
     public partial class MainForm : Form
     {
@@ -29,18 +30,14 @@ namespace Xisom.ReDesigned.FaceDetector
         private Action MainAction;
         private CancellationTokenSource MainCancellationTokenSource;
         private CancellationToken MainCancellationToken;
-        
         // process lock
         private object ProcessLock = new Object();
         private TimeSpan TTimeout = TimeSpan.FromMilliseconds(0);
         private bool LockTaken;
         private bool IsInitialized;
 
-        // thread process flags
-        private bool BackgroundProcessRunning;
-        private bool ThreadProcessingRunning;
-        private bool TaskProcessingRunning;
-
+        public enum THREAD_TYPE { NONE, THREAD, BACKGROUND_WORKER, TASK };
+        public int ThreadType;
         #endregion variables
         public MainForm()
         {
@@ -77,11 +74,7 @@ namespace Xisom.ReDesigned.FaceDetector
             // initlization of the locks
             this.LockTaken = false;
             this.IsInitialized = false;
-
-            // falg set 
-            this.BackgroundProcessRunning = false ;
-            this.ThreadProcessingRunning = false ;
-            this.TaskProcessingRunning = false ;
+            this.ThreadType = (int) THREAD_TYPE.NONE;
 
     }
 
@@ -618,6 +611,8 @@ namespace Xisom.ReDesigned.FaceDetector
 
         private void AutoDetectButton_Click(object sender, EventArgs e)
         {
+            if ((this.ThreadType == (int)THREAD_TYPE.NONE)||(this.ThreadType == (int)THREAD_TYPE.BACKGROUND_WORKER)) 
+            {
                 try
                 {
                     Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
@@ -635,6 +630,7 @@ namespace Xisom.ReDesigned.FaceDetector
                                 // running the procces in background. 
                                 autoProcessBackgroundWorker.RunWorkerAsync();
                                 this.ThreadFlag = true;
+                                this.ThreadType = (int)THREAD_TYPE.BACKGROUND_WORKER;
                                 autoDetectButton.Text = "Cancel";
                                 //threadProcessButton.Enabled = false;
                                 //taskProcessbutton.Enabled = false;
@@ -647,6 +643,7 @@ namespace Xisom.ReDesigned.FaceDetector
                                 // handling the cancellation for the process while running.
                                 autoProcessBackgroundWorker.CancelAsync();
                                 this.ThreadFlag = false;
+                                this.ThreadType = (int) THREAD_TYPE.NONE;
                                 //threadProcessButton.Enabled = true;
                                 //taskProcessbutton.Enabled = true;
 
@@ -667,7 +664,8 @@ namespace Xisom.ReDesigned.FaceDetector
                         Monitor.Exit(this.ProcessLock);
                         this.LockTaken = false;
                     }
-                }    
+                }
+            }   
 
         }
 
@@ -715,12 +713,15 @@ namespace Xisom.ReDesigned.FaceDetector
             this.ThreadFlag = false;
             autoDetectButton.Text = "Auto Process";
             processLabel.Text = "Process";
+            this.ThreadType = (int) THREAD_TYPE.NONE;
         }
 
         // thread Button process
         private void ThreadProcessButton_Click(object sender, EventArgs e)
         {
-            try
+            if ((this.ThreadType == (int) THREAD_TYPE.NONE) || (this.ThreadType == (int) THREAD_TYPE.THREAD))
+            {
+                try
                 {
                     Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
                     if (this.LockTaken)
@@ -734,9 +735,9 @@ namespace Xisom.ReDesigned.FaceDetector
                                 {
                                     IsBackground = true
                                 };
-
                                 this.MainThread.Start();
                                 this.ThreadFlag = true;
+                                this.ThreadType = (int)THREAD_TYPE.THREAD;
                                 processLabel.Text = "Thread Processing";
                                 //autoDetectButton.Enabled = false;
                                 //taskProcessbutton.Enabled = false;
@@ -745,6 +746,7 @@ namespace Xisom.ReDesigned.FaceDetector
                             {
                                 threadProcessButton.Text = "Thread Process";
                                 if (this.MainThread.IsAlive) { this.MainThread.Abort(); }
+                                this.ThreadType = (int)THREAD_TYPE.NONE;
                                 this.ThreadFlag = false;
                                 processLabel.Text = "Process";
                                 //autoDetectButton.Enabled = true;
@@ -766,6 +768,7 @@ namespace Xisom.ReDesigned.FaceDetector
                         this.LockTaken = false;
                     }
                 }
+            }
      
         }
 
@@ -810,6 +813,7 @@ namespace Xisom.ReDesigned.FaceDetector
             //taskProcessbutton.Enabled = true;
             this.ThreadFlag = false;
             this.LockTaken = false;
+            this.ThreadType = (int)THREAD_TYPE.NONE;
         }
 
         /// <summary>
@@ -896,54 +900,60 @@ namespace Xisom.ReDesigned.FaceDetector
                     //autoDetectButton.Enabled = true;
                     //threadProcessButton.Enabled = true;
                     this.ThreadFlag = false;
+                    this.ThreadType = (int)THREAD_TYPE.NONE;
                 });
                 this.Invoke(finalAction);
             });
 
-            
-            try
+
+            if ((this.ThreadType == (int)THREAD_TYPE.NONE) || (this.ThreadType == (int)THREAD_TYPE.TASK)) 
             {
-                Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
-                if (this.LockTaken)
+                try
                 {
-                    if (this.HasDir && this.IsInitialized)
+                    Monitor.TryEnter(this.ProcessLock, this.TTimeout, ref this.LockTaken);
+                    if (this.LockTaken)
                     {
-                        if (!this.ThreadFlag)
+                        if (this.HasDir && this.IsInitialized)
                         {
-                            Task.Run(MainAction, MainCancellationToken);
-                            this.ThreadFlag = true;
-                            taskProcessbutton.Text = "Cancel";
-                            processLabel.Text = "Task Processing";
-                            //autoDetectButton.Enabled = false;
-                            //threadProcessButton.Enabled = false;
+                            if (!this.ThreadFlag)
+                            {
+                                Task.Run(MainAction, MainCancellationToken);
+                                this.ThreadFlag = true;
+                                this.ThreadType = (int)THREAD_TYPE.TASK;
+                                taskProcessbutton.Text = "Cancel";
+                                processLabel.Text = "Task Processing";
+                                //autoDetectButton.Enabled = false;
+                                //threadProcessButton.Enabled = false;
 
+                            }
+                            else
+                            {
+                                taskProcessbutton.Text = "Task Process";
+                                MainCancellationTokenSource.Cancel();
+                                this.ThreadFlag = false;
+                                this.ThreadType = (int) THREAD_TYPE.NONE;
+                                processLabel.Text = "Process";
+                                //autoDetectButton.Enabled = true;
+                                //threadProcessButton.Enabled = true;
+                            }
                         }
-                        else
-                        {
-                            taskProcessbutton.Text = "Task Process";
-                            MainCancellationTokenSource.Cancel();
-                            this.ThreadFlag = false;
-                            processLabel.Text = "Process";
-                            //autoDetectButton.Enabled = true;
-                            //threadProcessButton.Enabled = true;
-                        }
+
                     }
-                    
-                }
-                
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message.ToString());
-            }
-            finally
-            {
-                if (this.LockTaken)
-                {
-                    Monitor.Exit(this.ProcessLock);
-                    this.LockTaken = false;
-                }
 
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message.ToString());
+                }
+                finally
+                {
+                    if (this.LockTaken)
+                    {
+                        Monitor.Exit(this.ProcessLock);
+                        this.LockTaken = false;
+                    }
+
+                }
             }
         }
 
