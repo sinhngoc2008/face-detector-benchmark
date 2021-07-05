@@ -12,8 +12,6 @@ using System.Xml.Serialization;
 
 namespace Xisom.ReDesigned.FaceDetector
 {
-    
-
     public partial class MainForm : Form
     {
         #region variables
@@ -30,6 +28,7 @@ namespace Xisom.ReDesigned.FaceDetector
         private Action MainAction;
         private CancellationTokenSource MainCancellationTokenSource;
         private CancellationToken MainCancellationToken;
+        
         // process lock
         private object ProcessLock = new Object();
         private TimeSpan TTimeout = TimeSpan.FromMilliseconds(0);
@@ -509,9 +508,9 @@ namespace Xisom.ReDesigned.FaceDetector
             
             mainDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            if (true) //TODO FIX THE CLICK FOR MAIN ROW
+            if (true) 
             {
-                // getting the row id selected
+                
                 if (e.RowIndex >= 1)
                 {
                     mainDataGridView.Rows[e.RowIndex].Selected = true;

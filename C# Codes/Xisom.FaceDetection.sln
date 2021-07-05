@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TensorflowTests", "Tensorfl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xisom.ReDesigned.FaceDetector", "Xisom.ReDesigned.FaceDetector\Xisom.ReDesigned.FaceDetector.csproj", "{597ABD35-71C1-491E-B4A4-DD40832289F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleThreadPractises", "ConsoleThreadPractises\ConsoleThreadPractises.csproj", "{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,14 @@ Global
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Release|x64.ActiveCfg = Release|Any CPU
 		{597ABD35-71C1-491E-B4A4-DD40832289F5}.Release|x64.Build.0 = Release|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Debug|x64.Build.0 = Debug|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Release|x64.ActiveCfg = Release|Any CPU
+		{6DFEDCE0-6F58-4F89-8E0E-0681311DEAD3}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,8 +13,8 @@ namespace ThreadWorker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWorker());
-            //Application.Run(new LayoutDesign());
+            //Application.Run(new MainWorker());
+            Application.Run(new LayoutDesign());
         }
     }
 }
